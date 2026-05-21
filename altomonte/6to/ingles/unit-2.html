@@ -1,0 +1,363 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .guide-wrap { padding: 1.5rem 1rem; max-width: 680px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; color: #E1F5EE; }
+  .hero h1 { font-size: 22px; font-weight: 500; color: #E1F5EE; margin-bottom: 4px; }
+  .hero p { font-size: 14px; color: #9FE1CB; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: #E1F5EE; margin-bottom: 8px; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 8px 16px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); font-size: 13px; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
+  .tab.active { background: #1D9E75; color: white; border-color: #1D9E75; font-weight: 500; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  .card-title i { color: #1D9E75; font-size: 18px; }
+
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .vocab-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; cursor: pointer; border: 0.5px solid var(--color-border-tertiary); transition: all 0.15s; }
+  .vocab-item:hover { border-color: #1D9E75; }
+  .vocab-item .word { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .vocab-item .translation { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; display: none; }
+  .vocab-item .emoji { font-size: 20px; margin-bottom: 4px; }
+  .vocab-item.revealed .translation { display: block; }
+  .vocab-item.revealed { border-color: #1D9E75; background: #E1F5EE; }
+
+  .hint { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 12px; }
+
+  .sup-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .sup-table th { text-align: left; padding: 8px 12px; background: var(--color-background-secondary); color: var(--color-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .sup-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+  .sup-table tr:last-child td { border-bottom: none; }
+  .tag-short { background: #E1F5EE; color: #0F6E56; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 500; }
+  .tag-long { background: #E6F1FB; color: #185FA5; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 500; }
+  .highlight-sup { font-weight: 500; color: #1D9E75; }
+
+  .rule-box { background: var(--color-background-secondary); border-left: 3px solid #1D9E75; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 1rem; margin-bottom: 1rem; }
+  .rule-box h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .rule-box p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .rule-box code { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 1px 6px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); }
+
+  .quiz-question { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn { background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 14px; text-align: left; cursor: pointer; font-size: 14px; color: var(--color-text-primary); transition: all 0.15s; }
+  .option-btn:hover:not(:disabled) { border-color: #1D9E75; background: #E1F5EE; color: #0F6E56; }
+  .option-btn.correct { background: #EAF3DE; border-color: #639922; color: #3B6D11; font-weight: 500; }
+  .option-btn.wrong { background: #FCEBEB; border-color: #E24B4A; color: #A32D2D; }
+  .feedback { margin-top: 10px; font-size: 13px; padding: 8px 12px; border-radius: var(--border-radius-md); display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: #EAF3DE; color: #3B6D11; }
+  .feedback.fail { background: #FCEBEB; color: #A32D2D; }
+
+  .score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+  .score-pill { background: var(--color-background-secondary); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--color-text-secondary); }
+  .score-pill span { font-weight: 500; color: #1D9E75; }
+
+  .progress { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #1D9E75; border-radius: 3px; transition: width 0.3s; }
+
+  .next-btn { background: #1D9E75; color: white; border: none; border-radius: var(--border-radius-md); padding: 10px 20px; font-size: 14px; cursor: pointer; margin-top: 10px; display: none; }
+  .next-btn.show { display: inline-block; }
+
+  .disaster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .disaster-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; border: 0.5px solid var(--color-border-tertiary); }
+  .disaster-card .d-emoji { font-size: 28px; margin-bottom: 6px; }
+  .disaster-card .d-word { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .disaster-card .d-def { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.4; }
+
+  .fill-blank { display: inline-block; border-bottom: 2px solid #1D9E75; min-width: 80px; margin: 0 4px; }
+  .fill-input { border: none; border-bottom: 2px solid #1D9E75; background: transparent; font-size: 14px; color: var(--color-text-primary); outline: none; min-width: 100px; padding: 2px 4px; }
+  .fill-input.correct { border-color: #639922; color: #3B6D11; }
+  .fill-input.wrong { border-color: #E24B4A; color: #A32D2D; }
+  .check-btn { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--color-text-primary); margin-top: 10px; }
+  .check-btn:hover { background: #1D9E75; color: white; border-color: #1D9E75; }
+  .sentence-row { padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 14px; color: var(--color-text-primary); line-height: 2; }
+  .sentence-row:last-child { border-bottom: none; }
+
+  .congrats { text-align: center; padding: 2rem; }
+  .congrats .big-emoji { font-size: 48px; margin-bottom: 12px; }
+  .congrats h2 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+  .congrats p { font-size: 14px; color: var(--color-text-secondary); }
+  .restart-btn { background: #1D9E75; color: white; border: none; border-radius: var(--border-radius-md); padding: 10px 24px; font-size: 14px; cursor: pointer; margin-top: 16px; }
+</style>
+
+<div class="guide-wrap">
+  <h2 class="sr-only">Interactive English study guide — Unit 2: Why do landscapes change? — 6th grade</h2>
+
+  <div class="hero">
+    <div class="badge">6° Básico · Inglés</div>
+    <h1>🌍 Why do landscapes change?</h1>
+    <p>Guía interactiva de estudio · Unit 2 · Prueba: 26 de mayo</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('vocab')">🏔 Vocabulary</button>
+    <button class="tab" onclick="showTab('grammar')">📐 Superlatives</button>
+    <button class="tab" onclick="showTab('disasters')">🌪 Disasters</button>
+    <button class="tab" onclick="showTab('quiz')">🎯 Quiz</button>
+    <button class="tab" onclick="showTab('fill')">✏️ Fill in</button>
+  </div>
+
+  <!-- VOCAB SECTION -->
+  <div class="section active" id="sec-vocab">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-mountain" aria-hidden="true"></i> Landscape vocabulary</div>
+      <p class="hint">Tap each word to reveal its meaning in Spanish!</p>
+      <div class="vocab-grid" id="vocab-grid"></div>
+    </div>
+  </div>
+
+  <!-- GRAMMAR SECTION -->
+  <div class="section" id="sec-grammar">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-book" aria-hidden="true"></i> How to form superlatives</div>
+      <div class="rule-box">
+        <h3>Short adjectives → add <code>-est</code></h3>
+        <p>big → the big<strong>gest</strong> · dry → the dri<strong>est</strong> · long → the lon<strong>gest</strong> · high → the high<strong>est</strong><br>
+        Remember: double the consonant when needed! (big → bigg<em>est</em>)</p>
+      </div>
+      <div class="rule-box">
+        <h3>Long adjectives → use <code>the most</code></h3>
+        <p>glacial → the <strong>most</strong> glacial · arid → the <strong>most</strong> arid · extreme → the <strong>most</strong> extreme</p>
+      </div>
+      <div class="rule-box">
+        <h3>Irregular adjectives</h3>
+        <p>good → the <strong>best</strong> · bad → the <strong>worst</strong></p>
+      </div>
+      <table class="sup-table">
+        <thead><tr><th>Adjective</th><th>Type</th><th>Superlative</th><th>Example</th></tr></thead>
+        <tbody id="sup-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DISASTERS SECTION -->
+  <div class="section" id="sec-disasters">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Natural disasters & weather</div>
+      <div class="disaster-grid" id="disaster-grid"></div>
+    </div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div class="section" id="sec-quiz">
+    <div class="score-bar">
+      <div class="score-pill">Score: <span id="score-txt">0</span> / <span id="total-txt">10</span></div>
+      <div class="progress"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div id="quiz-container"></div>
+    <div class="congrats" id="quiz-congrats" style="display:none;">
+      <div class="big-emoji" id="congrats-emoji">🌟</div>
+      <h2 id="congrats-title">Great job!</h2>
+      <p id="congrats-msg">You finished the quiz.</p>
+      <button class="restart-btn" onclick="restartQuiz()">Try again!</button>
+    </div>
+  </div>
+
+  <!-- FILL IN SECTION -->
+  <div class="section" id="sec-fill">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-pencil" aria-hidden="true"></i> Complete the sentences</div>
+      <p class="hint">Write the correct superlative form. Click "Check" when ready.</p>
+      <div id="fill-rows"></div>
+      <button class="check-btn" onclick="checkFill()">Check answers</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const vocabData = [
+  {word:"canyon", emoji:"🏜", es:"cañón"},
+  {word:"desert", emoji:"🏜", es:"desierto"},
+  {word:"glacier", emoji:"🧊", es:"glaciar"},
+  {word:"mountain range", emoji:"⛰", es:"cordillera"},
+  {word:"rainforest", emoji:"🌿", es:"selva tropical"},
+  {word:"volcano", emoji:"🌋", es:"volcán"},
+  {word:"waterfall", emoji:"💧", es:"cascada"},
+  {word:"dry", emoji:"☀️", es:"seco"},
+  {word:"rocky", emoji:"🪨", es:"rocoso"},
+  {word:"wet", emoji:"🌧", es:"húmedo"},
+  {word:"drought", emoji:"🌵", es:"sequía"},
+  {word:"flood", emoji:"🌊", es:"inundación"},
+  {word:"hurricane", emoji:"🌀", es:"huracán"},
+  {word:"snowstorm", emoji:"❄️", es:"tormenta de nieve"},
+  {word:"arid", emoji:"🏝", es:"árido"},
+  {word:"glacial", emoji:"🥶", es:"glacial"},
+];
+
+const supData = [
+  {adj:"big", type:"short", sup:"the biggest", ex:"The Amazon is the biggest rainforest."},
+  {adj:"dry", type:"short", sup:"the driest", ex:"The Atacama is the driest desert."},
+  {adj:"long", type:"short", sup:"the longest", ex:"The Andes is the longest mountain range."},
+  {adj:"high", type:"short", sup:"the highest", ex:"Angel Falls is the highest waterfall."},
+  {adj:"large", type:"short", sup:"the largest", ex:"The Sahara is the largest hot desert."},
+  {adj:"glacial", type:"long", sup:"the most glacial", ex:"What is the most glacial country?"},
+  {adj:"arid", type:"long", sup:"the most arid", ex:"Chile has the most arid region."},
+  {adj:"extreme", type:"long", sup:"the most extreme", ex:"What is the most extreme climate?"},
+  {adj:"good", type:"irregular", sup:"the best", ex:"She is the best athlete."},
+  {adj:"bad", type:"irregular", sup:"the worst", ex:"What is the worst type of weather?"},
+];
+
+const disasterData = [
+  {word:"drought", emoji:"🌵", def:"Long period with no rain; land becomes very dry."},
+  {word:"flood", emoji:"🌊", def:"Water overflows onto normally dry land."},
+  {word:"hurricane", emoji:"🌀", def:"Massive tropical storm with strong winds."},
+  {word:"snowstorm", emoji:"❄️", def:"Heavy snowfall with strong winds."},
+  {word:"arid", emoji:"🏜", def:"Adjective: very dry, little or no rain."},
+  {word:"glacial", emoji:"🧊", def:"Adjective: very cold, related to glaciers."},
+];
+
+const quizData = [
+  {q:"What is the superlative of 'big'?", opts:["the most big","the biggest","the bigest","the more big"], ans:1},
+  {q:"Which landscape receives little or no water?", opts:["rainforest","glacier","desert","waterfall"], ans:2},
+  {q:"The Atacama is __ desert in the world.", opts:["the most driest","the more dry","the driest","the most dry"], ans:2},
+  {q:"Which is a LONG superlative?", opts:["the highest","the wettest","the most glacial","the driest"], ans:2},
+  {q:"What natural disaster brings heavy rain and strong winds?", opts:["drought","hurricane","snowstorm","flood"], ans:1},
+  {q:"The Amazon is __ rainforest.", opts:["the most big","the bigest","the biggest","the more biggest"], ans:2},
+  {q:"What does 'arid' mean?", opts:["very cold","very wet","very dry","very windy"], ans:2},
+  {q:"Complete: 'Angel Falls is __ waterfall.'", opts:["the most high","the highest","the more high","the hightest"], ans:1},
+  {q:"Which irregular superlative is correct?", opts:["the goodest","the most good","the best","the gooder"], ans:2},
+  {q:"A long period with no rain is called a …", opts:["flood","snowstorm","hurricane","drought"], ans:3},
+];
+
+const fillData = [
+  {before:"The Andes is", blank:"the longest", after:"mountain range on Earth.", adj:"long"},
+  {before:"The Atacama is", blank:"the driest", after:"desert in the world.", adj:"dry"},
+  {before:"Antarctica has", blank:"the most glacial", after:"climate on the planet.", adj:"glacial"},
+  {before:"The Amazon is", blank:"the biggest", after:"rainforest in the world.", adj:"big"},
+  {before:"What is", blank:"the most arid", after:"region in your country?", adj:"arid"},
+];
+
+function buildVocab() {
+  const g = document.getElementById('vocab-grid');
+  vocabData.forEach((v,i) => {
+    const d = document.createElement('div');
+    d.className = 'vocab-item';
+    d.innerHTML = `<div class="emoji">${v.emoji}</div><div class="word">${v.word}</div><div class="translation">${v.es}</div>`;
+    d.onclick = () => d.classList.toggle('revealed');
+    g.appendChild(d);
+  });
+}
+
+function buildSuperlatives() {
+  const tb = document.getElementById('sup-tbody');
+  supData.forEach(s => {
+    const tag = s.type === 'short' ? `<span class="tag-short">short</span>` : s.type === 'long' ? `<span class="tag-long">long</span>` : `<span class="tag-short" style="background:#FAEEDA;color:#854F0B;">irregular</span>`;
+    tb.innerHTML += `<tr><td>${s.adj}</td><td>${tag}</td><td class="highlight-sup">${s.sup}</td><td style="font-size:13px;color:var(--color-text-secondary)">${s.ex}</td></tr>`;
+  });
+}
+
+function buildDisasters() {
+  const g = document.getElementById('disaster-grid');
+  disasterData.forEach(d => {
+    g.innerHTML += `<div class="disaster-card"><div class="d-emoji">${d.emoji}</div><div class="d-word">${d.word}</div><div class="d-def">${d.def}</div></div>`;
+  });
+}
+
+let qIndex = 0, score = 0;
+function buildQuiz() {
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const container = document.getElementById('quiz-container');
+  if (qIndex >= quizData.length) { showCongrats(); return; }
+  const q = quizData[qIndex];
+  document.getElementById('total-txt').textContent = quizData.length;
+  document.getElementById('score-txt').textContent = score;
+  document.getElementById('progress-fill').style.width = (qIndex/quizData.length*100)+'%';
+  container.innerHTML = `
+    <div class="quiz-question">
+      <div class="quiz-q-text">${qIndex+1}. ${q.q}</div>
+      <div class="options">${q.opts.map((o,i)=>`<button class="option-btn" onclick="selectOption(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+      <div class="feedback" id="qfeedback"></div>
+    </div>
+    <button class="next-btn" id="next-btn" onclick="nextQ()">Next question →</button>`;
+}
+
+function selectOption(btn, idx, correct) {
+  const btns = btn.closest('.options').querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('qfeedback');
+  if (idx === correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ Correct! Well done!';
+    fb.className = 'feedback show ok';
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    btns[correct].classList.add('correct');
+    fb.textContent = '❌ Not quite — the correct answer is highlighted above.';
+    fb.className = 'feedback show fail';
+  }
+  document.getElementById('score-txt').textContent = score;
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQ() {
+  qIndex++;
+  renderQuestion();
+}
+
+function showCongrats() {
+  document.getElementById('quiz-container').style.display = 'none';
+  document.getElementById('progress-fill').style.width = '100%';
+  const pct = score/quizData.length;
+  let emoji = pct >= 0.9 ? '🌟' : pct >= 0.7 ? '🎉' : '💪';
+  let title = pct >= 0.9 ? 'Amazing work!' : pct >= 0.7 ? 'Great job!' : 'Keep practising!';
+  let msg = `You scored ${score} out of ${quizData.length}. ${pct >= 0.7 ? 'You are ready for the test!' : 'Review the vocabulary and try again.'}`;
+  document.getElementById('congrats-emoji').textContent = emoji;
+  document.getElementById('congrats-title').textContent = title;
+  document.getElementById('congrats-msg').textContent = msg;
+  document.getElementById('quiz-congrats').style.display = 'block';
+}
+
+function restartQuiz() {
+  qIndex = 0; score = 0;
+  document.getElementById('quiz-container').style.display = 'block';
+  document.getElementById('quiz-congrats').style.display = 'none';
+  renderQuestion();
+}
+
+function buildFill() {
+  const container = document.getElementById('fill-rows');
+  fillData.forEach((f,i) => {
+    container.innerHTML += `<div class="sentence-row">${f.before} <input class="fill-input" id="fi-${i}" placeholder="${f.adj}..." data-ans="${f.blank}"> ${f.after}</div>`;
+  });
+}
+
+function checkFill() {
+  fillData.forEach((f,i) => {
+    const inp = document.getElementById('fi-'+i);
+    const val = inp.value.trim().toLowerCase();
+    const ans = f.blank.toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if (val === ans || val === ans.replace('the ','')) {
+      inp.classList.add('correct');
+    } else {
+      inp.classList.add('wrong');
+      inp.placeholder = f.blank;
+    }
+  });
+}
+
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+buildVocab();
+buildSuperlatives();
+buildDisasters();
+buildQuiz();
+buildFill();
+</script>
