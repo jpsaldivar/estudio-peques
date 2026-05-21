@@ -429,7 +429,7 @@ function renderBreadcrumb(items) {
     const isLast = i === parts.length - 1;
     const sep = i > 0 ? '<span class="sep">›</span>' : '';
     const cls = isLast ? 'active' : '';
-    const click = isLast ? '' : `onclick="navTo(${JSON.stringify(item.params)})"`;
+    const click = isLast ? '' : `onclick='navTo(${JSON.stringify(item.params)})'`;
     return `${sep}<span class="${cls}" ${click}>${item.label}</span>`;
   }).join('');
 }
