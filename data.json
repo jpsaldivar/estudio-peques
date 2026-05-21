@@ -1,0 +1,87 @@
+[
+  {
+    "id": "altomonte",
+    "nombre": "Altomonte",
+    "icon": "🏫",
+    "color": "#667eea",
+    "bg": "#ededff",
+    "cursos": [
+      {
+        "id": "3ro",
+        "nombre": "3° Básico",
+        "emoji": "3️⃣",
+        "color": "#f6a623",
+        "bg": "#fff4e0",
+        "asignaturas": [
+          {
+            "id": "matematicas",
+            "nombre": "Matemáticas",
+            "icon": "🔢",
+            "color": "#e74c8b",
+            "archivos": []
+          },
+          {
+            "id": "lenguaje",
+            "nombre": "Lenguaje",
+            "icon": "📖",
+            "color": "#27ae60",
+            "archivos": [
+            ]
+          },
+          {
+            "id": "ciencias",
+            "nombre": "Ciencias",
+            "icon": "🔬",
+            "color": "#16a085",
+            "archivos": [
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6to",
+        "nombre": "6° Básico",
+        "emoji": "6️⃣",
+        "color": "#667eea",
+        "bg": "#ededff",
+        "asignaturas": [
+          {
+            "id": "ingles",
+            "nombre": "Inglés",
+            "icon": "🌍",
+            "color": "#1D9E75",
+            "archivos": [
+              { "nombre": "Unit 2 – Why do landscapes change?", "archivo": "altomonte/6to/ingles/unit-2.html" },
+              { "nombre": "Unit 2 – Why do landscapes change? - Opción 2", "archivo": "altomonte/6to/ingles/unit-2-v2.html" }
+
+            ]
+          },
+          {
+            "id": "matematicas",
+            "nombre": "Matemáticas",
+            "icon": "🔢",
+            "color": "#e74c8b",
+            "archivos": [
+            ]
+          },
+          {
+            "id": "historia",
+            "nombre": "Historia",
+            "icon": "🏛",
+            "color": "#e67e22",
+            "archivos": [
+            ]
+          },
+          {
+            "id": "ciencias",
+            "nombre": "Ciencias",
+            "icon": "🔬",
+            "color": "#16a085",
+            "archivos": [
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

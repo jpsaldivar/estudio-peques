@@ -13,305 +13,156 @@
     --shadow: 0 4px 20px rgba(0,0,0,0.08);
     --shadow-hover: 0 8px 32px rgba(0,0,0,0.14);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito Sans', sans-serif; background: var(--bg); min-height: 100vh; color: #2d2d2d; }
 
-  body {
-    font-family: 'Nunito Sans', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    color: #2d2d2d;
-  }
-
-  /* ── TOP BAR ── */
   .topbar {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 0 2rem;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 0 2rem; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
     box-shadow: 0 2px 16px rgba(102,126,234,0.3);
   }
   .topbar-logo {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
+    font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px;
+    color: white; display: flex; align-items: center; gap: 10px;
+    text-decoration: none; cursor: pointer;
   }
   .topbar-logo .logo-icon {
-    width: 34px; height: 34px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    width: 34px; height: 34px; background: rgba(255,255,255,0.2);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;
   }
   .breadcrumb {
     display: flex; align-items: center; gap: 6px;
     font-size: 13px; color: rgba(255,255,255,0.8);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
+    font-family: 'Nunito', sans-serif; font-weight: 600; flex-wrap: wrap;
   }
   .breadcrumb span { cursor: pointer; transition: color 0.15s; }
   .breadcrumb span:hover { color: white; }
   .breadcrumb .sep { color: rgba(255,255,255,0.4); }
-  .breadcrumb span.active { color: white; font-weight: 800; }
+  .breadcrumb span.active { color: white; font-weight: 800; cursor: default; }
 
-  /* ── HERO ── */
-  .hero {
-    text-align: center;
-    padding: 3rem 2rem 2rem;
-  }
-  .hero h1 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 32px; font-weight: 900;
-    color: #3a3a5c;
-    margin-bottom: 8px;
-  }
+  .hero { text-align: center; padding: 3rem 2rem 2rem; }
+  .hero h1 { font-family: 'Nunito', sans-serif; font-size: 32px; font-weight: 900; color: #3a3a5c; margin-bottom: 8px; }
   .hero p { font-size: 15px; color: #7a7a9a; }
 
-  /* ── SEARCH ── */
-  .search-wrap {
-    max-width: 480px; margin: 0 auto 2rem;
-    padding: 0 1.5rem;
-  }
+  .search-wrap { max-width: 480px; margin: 0 auto 2rem; padding: 0 1.5rem; position: relative; }
   .search-box {
-    width: 100%;
-    padding: 12px 20px 12px 44px;
-    border-radius: 50px;
-    border: 2px solid #e0e0f0;
-    background: white;
-    font-size: 15px;
-    font-family: 'Nunito Sans', sans-serif;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%; padding: 12px 20px 12px 44px;
+    border-radius: 50px; border: 2px solid #e0e0f0;
+    background: white; font-size: 15px; font-family: 'Nunito Sans', sans-serif;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   }
   .search-box:focus { border-color: #667eea; box-shadow: 0 0 0 4px rgba(102,126,234,0.15); }
-  .search-wrap { position: relative; }
-  .search-icon {
-    position: absolute; left: 2.5rem; top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px; pointer-events: none;
-  }
+  .search-icon { position: absolute; left: 2.5rem; top: 50%; transform: translateY(-50%); font-size: 18px; pointer-events: none; }
 
-  /* ── MAIN ── */
   .main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 4rem; }
 
-  /* ── LEVEL: COLEGIOS ── */
-  .grid-colegios {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+  .loading { text-align: center; padding: 4rem 1rem; color: #9a9ab0; font-family: 'Nunito', sans-serif; font-size: 16px; }
+  .loading .spin { display: inline-block; font-size: 32px; animation: spin 1s linear infinite; margin-bottom: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box {
+    background: #fff0f0; border: 1.5px solid #ffb3b3; border-radius: var(--radius);
+    padding: 1.5rem; text-align: center; color: #c0392b; font-family: 'Nunito', sans-serif;
   }
+  .error-box h3 { font-weight: 800; margin-bottom: 6px; }
+  .error-box p { font-size: 13px; opacity: 0.8; }
+
+  .grid-colegios { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
   .colegio-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    cursor: pointer;
-    box-shadow: var(--shadow);
+    background: var(--card); border-radius: var(--radius); padding: 1.5rem;
+    cursor: pointer; box-shadow: var(--shadow);
     transition: transform 0.18s, box-shadow 0.18s;
     border: 2px solid transparent;
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
     animation: fadeUp 0.3s ease both;
   }
-  .colegio-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    border-color: #667eea;
-  }
-  .colegio-icon {
-    width: 64px; height: 64px;
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px;
-  }
-  .colegio-card h3 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 17px; font-weight: 800;
-    color: #3a3a5c;
-  }
-  .colegio-card .meta {
-    font-size: 12px; color: #9a9ab0;
-    font-weight: 600;
-  }
+  .colegio-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #667eea; }
+  .colegio-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+  .colegio-card h3 { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; color: #3a3a5c; }
+  .colegio-card .meta { font-size: 12px; color: #9a9ab0; font-weight: 600; }
 
-  /* ── LEVEL: CURSOS ── */
-  .grid-cursos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
-  }
+  .grid-cursos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
   .curso-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 1.25rem 1rem;
-    cursor: pointer;
-    box-shadow: var(--shadow);
+    background: var(--card); border-radius: var(--radius); padding: 1.25rem 1rem;
+    cursor: pointer; box-shadow: var(--shadow);
     transition: transform 0.18s, box-shadow 0.18s;
-    border: 2px solid transparent;
-    text-align: center;
+    border: 2px solid transparent; text-align: center;
     animation: fadeUp 0.3s ease both;
   }
   .curso-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-  .curso-badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-  .curso-card h3 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px; font-weight: 800;
-    color: #3a3a5c;
-  }
+  .curso-badge { display: inline-block; padding: 6px 14px; border-radius: 50px; font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; margin-bottom: 8px; }
+  .curso-card h3 { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; color: #3a3a5c; }
   .curso-card .meta { font-size: 11px; color: #9a9ab0; font-weight: 600; margin-top: 4px; }
 
-  /* ── LEVEL: ASIGNATURAS ── */
-  .grid-asignaturas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 14px;
-  }
+  .grid-asignaturas { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
   .asig-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 1.5rem 1rem;
-    cursor: pointer;
-    box-shadow: var(--shadow);
+    background: var(--card); border-radius: var(--radius); padding: 1.5rem 1rem;
+    cursor: pointer; box-shadow: var(--shadow);
     transition: transform 0.18s, box-shadow 0.18s;
-    border-top: 5px solid transparent;
-    text-align: center;
+    border-top: 5px solid transparent; text-align: center;
     animation: fadeUp 0.3s ease both;
   }
   .asig-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
   .asig-icon { font-size: 38px; margin-bottom: 10px; }
-  .asig-card h3 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 16px; font-weight: 800;
-    color: #3a3a5c; margin-bottom: 4px;
-  }
+  .asig-card h3 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800; color: #3a3a5c; margin-bottom: 4px; }
   .asig-card .count { font-size: 12px; color: #9a9ab0; font-weight: 600; }
 
-  /* ── LEVEL: ARCHIVOS ── */
-  .grid-archivos {
-    display: flex; flex-direction: column; gap: 10px;
-  }
+  .grid-archivos { display: flex; flex-direction: column; gap: 10px; }
   .archivo-card {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    background: var(--card); border-radius: 14px; padding: 1rem 1.25rem;
+    cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     transition: transform 0.15s, box-shadow 0.15s;
     display: flex; align-items: center; gap: 14px;
-    text-decoration: none;
-    border: 1.5px solid #ececf8;
+    text-decoration: none; border: 1.5px solid #ececf8;
     animation: fadeUp 0.25s ease both;
   }
-  .archivo-card:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-hover);
-    border-color: #667eea;
-  }
-  .archivo-icon {
-    width: 44px; height: 44px; min-width: 44px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-  }
+  .archivo-card:hover { transform: translateX(4px); box-shadow: var(--shadow-hover); border-color: #667eea; }
+  .archivo-icon { width: 44px; height: 44px; min-width: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
   .archivo-info { flex: 1; }
-  .archivo-info h4 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px; font-weight: 800;
-    color: #3a3a5c; margin-bottom: 2px;
-  }
+  .archivo-info h4 { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; color: #3a3a5c; margin-bottom: 2px; }
   .archivo-info p { font-size: 12px; color: #9a9ab0; }
   .archivo-arrow { font-size: 18px; color: #c0c0d8; }
 
-  /* ── SECTION HEADER ── */
-  .sec-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1.25rem;
-  }
-  .sec-header h2 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 20px; font-weight: 900;
-    color: #3a3a5c;
-  }
-  .sec-header .pill {
-    background: #ededff;
-    color: #667eea;
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 12px;
-    font-weight: 800;
-    font-family: 'Nunito', sans-serif;
-  }
+  .sec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+  .sec-header h2 { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #3a3a5c; }
+  .sec-header .pill { background: #ededff; color: #667eea; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 800; font-family: 'Nunito', sans-serif; }
 
-  /* ── BACK BTN ── */
   .back-btn {
     display: inline-flex; align-items: center; gap: 6px;
-    background: white;
-    border: 2px solid #e0e0f0;
-    border-radius: 50px;
-    padding: 7px 16px;
-    font-size: 13px; font-weight: 700;
-    font-family: 'Nunito', sans-serif;
-    color: #667eea;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    transition: all 0.15s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    background: white; border: 2px solid #e0e0f0; border-radius: 50px;
+    padding: 7px 16px; font-size: 13px; font-weight: 700;
+    font-family: 'Nunito', sans-serif; color: #667eea;
+    cursor: pointer; margin-bottom: 1.5rem;
+    transition: all 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .back-btn:hover { background: #667eea; color: white; border-color: #667eea; }
 
-  /* ── EMPTY STATE ── */
-  .empty {
-    text-align: center; padding: 3rem 1rem;
-    color: #9a9ab0;
-  }
+  .empty { text-align: center; padding: 3rem 1rem; color: #9a9ab0; }
   .empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
   .empty h3 { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 18px; margin-bottom: 6px; color: #5a5a7a; }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── STAGGER ── */
-  .stagger > *:nth-child(1) { animation-delay: 0.0s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .stagger > *:nth-child(1) { animation-delay: 0.00s; }
   .stagger > *:nth-child(2) { animation-delay: 0.05s; }
-  .stagger > *:nth-child(3) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.10s; }
   .stagger > *:nth-child(4) { animation-delay: 0.15s; }
-  .stagger > *:nth-child(5) { animation-delay: 0.2s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.20s; }
   .stagger > *:nth-child(6) { animation-delay: 0.25s; }
-  .stagger > *:nth-child(7) { animation-delay: 0.3s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.30s; }
   .stagger > *:nth-child(8) { animation-delay: 0.35s; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <a class="topbar-logo" href="#" onclick="goHome()">
+  <div class="topbar-logo" onclick="navTo({})">
     <div class="logo-icon">📚</div>
     Mis Guías
-  </a>
-  <div class="breadcrumb" id="breadcrumb">
-    <span class="active" onclick="goHome()">Inicio</span>
   </div>
+  <div class="breadcrumb" id="breadcrumb"></div>
 </div>
 
 <div class="hero" id="hero">
@@ -324,126 +175,67 @@
   <input class="search-box" type="text" id="search-input" placeholder="Buscar guía..." oninput="handleSearch()">
 </div>
 
-<div class="main" id="main-content"></div>
+<div class="main" id="main-content">
+  <div class="loading"><div class="spin">⚙️</div><br>Cargando guías...</div>
+</div>
 
 <script>
-// ─────────────────────────────────────────────
-// DATA STRUCTURE
-// Agrega aquí tus colegios, cursos, asignaturas y archivos.
-// Para agregar un nuevo archivo: añádelo al array "archivos" de su asignatura.
-// Para agregar una asignatura: añádela al array "asignaturas" de su curso.
-// Para agregar un curso: añádelo al array "cursos" de su colegio.
-// ─────────────────────────────────────────────
-const DATA = [
-  {
-    id: "altomonte",
-    nombre: "Altomonte",
-    icon: "🏫",
-    color: "#667eea",
-    bg: "#ededff",
-    cursos: [
-      {
-        id: "3ro",
-        nombre: "3° Básico",
-        emoji: "3️⃣",
-        color: "#f6a623",
-        bg: "#fff4e0",
-        asignaturas: [
-          {
-            id: "matematicas",
-            nombre: "Matemáticas",
-            icon: "🔢",
-            color: "#e74c8b",
-            archivos: [
-              { nombre: "Fracciones – Unidad 1", archivo: "altomonte/3ro/matematicas/fracciones-u1.html" },
-              { nombre: "Tablas de multiplicar", archivo: "altomonte/3ro/matematicas/tablas.html" },
-            ]
-          },
-          {
-            id: "lenguaje",
-            nombre: "Lenguaje",
-            icon: "📖",
-            color: "#27ae60",
-            archivos: [
-              { nombre: "Comprensión lectora – Texto 1", archivo: "altomonte/3ro/lenguaje/comprension-1.html" },
-            ]
-          },
-          {
-            id: "ciencias",
-            nombre: "Ciencias",
-            icon: "🔬",
-            color: "#16a085",
-            archivos: [
-              { nombre: "El cuerpo humano", archivo: "altomonte/3ro/ciencias/cuerpo-humano.html" },
-            ]
-          },
-        ]
-      },
-      {
-        id: "6to",
-        nombre: "6° Básico",
-        emoji: "6️⃣",
-        color: "#667eea",
-        bg: "#ededff",
-        asignaturas: [
-          {
-            id: "ingles",
-            nombre: "Inglés",
-            icon: "🌍",
-            color: "#1D9E75",
-            archivos: [
-              { nombre: "Unit 2 – Why do landscapes change?", archivo: "altomonte/6to/ingles/unit-2.html" },
-              { nombre: "Unit 2 – Why do landscapes change? - V2", archivo: "altomonte/6to/ingles/unit-2-v2.html" },
-            ]
-          },
-          {
-            id: "matematicas",
-            nombre: "Matemáticas",
-            icon: "🔢",
-            color: "#e74c8b",
-            archivos: [
-              { nombre: "Porcentajes – Unidad 3", archivo: "altomonte/6to/matematicas/porcentajes-u3.html" },
-            ]
-          },
-          {
-            id: "historia",
-            nombre: "Historia",
-            icon: "🏛",
-            color: "#e67e22",
-            archivos: [
-              { nombre: "Civilizaciones antiguas", archivo: "altomonte/6to/historia/civilizaciones.html" },
-            ]
-          },
-          {
-            id: "ciencias",
-            nombre: "Ciencias",
-            icon: "🔬",
-            color: "#16a085",
-            archivos: [
-              { nombre: "Sistema solar", archivo: "altomonte/6to/ciencias/sistema-solar.html" },
-            ]
-          },
-        ]
-      }
-    ]
+// ── State ──────────────────────────────────────────────
+let DATA = [];
+
+// ── URL helpers ────────────────────────────────────────
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    colegio:    p.get('colegio')    || null,
+    curso:      p.get('curso')      || null,
+    asignatura: p.get('asignatura') || null,
+    q:          p.get('q')          || null,
+  };
+}
+
+function setParams(params) {
+  const p = new URLSearchParams();
+  if (params.colegio)    p.set('colegio',    params.colegio);
+  if (params.curso)      p.set('curso',      params.curso);
+  if (params.asignatura) p.set('asignatura', params.asignatura);
+  if (params.q)          p.set('q',          params.q);
+  const newUrl = p.toString() ? `${location.pathname}?${p}` : location.pathname;
+  history.pushState(null, '', newUrl);
+}
+
+// ── Navigation ─────────────────────────────────────────
+function navTo(params, pushState = true) {
+  if (pushState) setParams(params);
+  render(params);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Browser back/forward
+window.addEventListener('popstate', () => navTo(getParams(), false));
+
+// ── Render ─────────────────────────────────────────────
+function render(params) {
+  const { colegio, curso, asignatura, q } = params;
+  const hero        = document.getElementById('hero');
+  const searchWrap  = document.getElementById('search-wrap');
+  const main        = document.getElementById('main-content');
+  const searchInput = document.getElementById('search-input');
+
+  // Search mode
+  if (q !== null) {
+    hero.style.display = 'block';
+    searchWrap.style.display = 'block';
+    searchInput.value = q;
+    renderBreadcrumb([{ label: `"${q}"`, params: { q } }]);
+    renderSearch(q, main);
+    return;
   }
-  // Agrega más colegios aquí siguiendo la misma estructura
-];
 
-// ─────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────
-let state = { level: 'colegios', colegio: null, curso: null, asignatura: null };
+  searchInput.value = '';
 
-// ─────────────────────────────────────────────
-// RENDER
-// ─────────────────────────────────────────────
-function render() {
-  const main = document.getElementById('main-content');
-  const hero = document.getElementById('hero');
-  const searchWrap = document.getElementById('search-wrap');
-
-  if (state.level === 'colegios') {
+  // ── Colegios ──
+  if (!colegio) {
     hero.style.display = 'block';
     searchWrap.style.display = 'block';
     renderBreadcrumb([]);
@@ -454,150 +246,126 @@ function render() {
       </div>
       <div class="grid-colegios stagger">
         ${DATA.map(c => `
-          <div class="colegio-card" onclick="navTo('cursos','${c.id}')">
+          <div class="colegio-card" onclick="navTo({colegio:'${c.id}'})">
             <div class="colegio-icon" style="background:${c.bg}">${c.icon}</div>
             <h3>${c.nombre}</h3>
-            <div class="meta">${c.cursos.length} curso${c.cursos.length!==1?'s':''}</div>
-          </div>
-        `).join('')}
+            <div class="meta">${c.cursos.length} curso${c.cursos.length !== 1 ? 's' : ''}</div>
+          </div>`).join('')}
       </div>`;
+    return;
+  }
 
-  } else if (state.level === 'cursos') {
-    const col = DATA.find(c => c.id === state.colegio);
+  const col = DATA.find(c => c.id === colegio);
+  if (!col) { main.innerHTML = notFound('Colegio no encontrado'); return; }
+
+  // ── Cursos ──
+  if (!curso) {
     hero.style.display = 'none';
     searchWrap.style.display = 'none';
-    renderBreadcrumb([{label: col.nombre, action: `navTo('cursos','${col.id}')`}]);
+    renderBreadcrumb([{ label: col.nombre, params: { colegio } }]);
     main.innerHTML = `
-      <button class="back-btn" onclick="goBack('colegios')">← Volver</button>
+      <button class="back-btn" onclick="navTo({})">← Volver</button>
       <div class="sec-header">
         <h2>${col.icon} ${col.nombre}</h2>
         <span class="pill">${col.cursos.length} cursos</span>
       </div>
       <div class="grid-cursos stagger">
         ${col.cursos.map(cu => `
-          <div class="curso-card" onclick="navTo('asignaturas','${col.id}','${cu.id}')"
+          <div class="curso-card" onclick="navTo({colegio:'${col.id}',curso:'${cu.id}'})"
                style="border-color:${cu.color}">
             <div class="curso-badge" style="background:${cu.bg};color:${cu.color}">${cu.emoji}</div>
             <h3>${cu.nombre}</h3>
-            <div class="meta">${cu.asignaturas.length} asignatura${cu.asignaturas.length!==1?'s':''}</div>
-          </div>
-        `).join('')}
+            <div class="meta">${cu.asignaturas.length} asignatura${cu.asignaturas.length !== 1 ? 's' : ''}</div>
+          </div>`).join('')}
       </div>`;
+    return;
+  }
 
-  } else if (state.level === 'asignaturas') {
-    const col = DATA.find(c => c.id === state.colegio);
-    const cu = col.cursos.find(x => x.id === state.curso);
+  const cu = col.cursos.find(x => x.id === curso);
+  if (!cu) { main.innerHTML = notFound('Curso no encontrado'); return; }
+
+  // ── Asignaturas ──
+  if (!asignatura) {
     hero.style.display = 'none';
     searchWrap.style.display = 'none';
     renderBreadcrumb([
-      {label: col.nombre, action: `navTo('cursos','${col.id}')`},
-      {label: cu.nombre, action: `navTo('asignaturas','${col.id}','${cu.id}')`}
+      { label: col.nombre, params: { colegio } },
+      { label: cu.nombre,  params: { colegio, curso } },
     ]);
     main.innerHTML = `
-      <button class="back-btn" onclick="navTo('cursos','${col.id}')">← Volver</button>
+      <button class="back-btn" onclick="navTo({colegio:'${col.id}'})">← Volver</button>
       <div class="sec-header">
         <h2>${cu.emoji} ${cu.nombre}</h2>
         <span class="pill">${cu.asignaturas.length} asignaturas</span>
       </div>
       <div class="grid-asignaturas stagger">
         ${cu.asignaturas.map(a => `
-          <div class="asig-card" onclick="navTo('archivos','${col.id}','${cu.id}','${a.id}')"
+          <div class="asig-card" onclick="navTo({colegio:'${col.id}',curso:'${cu.id}',asignatura:'${a.id}'})"
                style="border-top-color:${a.color}">
             <div class="asig-icon">${a.icon}</div>
             <h3>${a.nombre}</h3>
-            <div class="count">${a.archivos.length} guía${a.archivos.length!==1?'s':''}</div>
-          </div>
-        `).join('')}
+            <div class="count">${a.archivos.length} guía${a.archivos.length !== 1 ? 's' : ''}</div>
+          </div>`).join('')}
       </div>`;
-
-  } else if (state.level === 'archivos') {
-    const col = DATA.find(c => c.id === state.colegio);
-    const cu = col.cursos.find(x => x.id === state.curso);
-    const asig = cu.asignaturas.find(x => x.id === state.asignatura);
-    hero.style.display = 'none';
-    searchWrap.style.display = 'none';
-    renderBreadcrumb([
-      {label: col.nombre, action: `navTo('cursos','${col.id}')`},
-      {label: cu.nombre, action: `navTo('asignaturas','${col.id}','${cu.id}')`},
-      {label: asig.nombre, action: `navTo('archivos','${col.id}','${cu.id}','${asig.id}')`}
-    ]);
-    main.innerHTML = `
-      <button class="back-btn" onclick="navTo('asignaturas','${col.id}','${cu.id}')">← Volver</button>
-      <div class="sec-header">
-        <h2>${asig.icon} ${asig.nombre}</h2>
-        <span class="pill">${asig.archivos.length} guía${asig.archivos.length!==1?'s':''}</span>
-      </div>
-      <div class="grid-archivos stagger">
-        ${asig.archivos.map((f,i) => `
-          <a class="archivo-card" href="${f.archivo}">
-            <div class="archivo-icon" style="background:${asig.color}22">${asig.icon}</div>
-            <div class="archivo-info">
-              <h4>${f.nombre}</h4>
-              <p>${asig.nombre} · ${cu.nombre} · ${col.nombre}</p>
-            </div>
-            <span class="archivo-arrow">›</span>
-          </a>
-        `).join('')}
-      </div>`;
+    return;
   }
+
+  const asig = cu.asignaturas.find(x => x.id === asignatura);
+  if (!asig) { main.innerHTML = notFound('Asignatura no encontrada'); return; }
+
+  // ── Archivos ──
+  hero.style.display = 'none';
+  searchWrap.style.display = 'none';
+  renderBreadcrumb([
+    { label: col.nombre,  params: { colegio } },
+    { label: cu.nombre,   params: { colegio, curso } },
+    { label: asig.nombre, params: { colegio, curso, asignatura } },
+  ]);
+  main.innerHTML = `
+    <button class="back-btn" onclick="navTo({colegio:'${col.id}',curso:'${cu.id}'})">← Volver</button>
+    <div class="sec-header">
+      <h2>${asig.icon} ${asig.nombre}</h2>
+      <span class="pill">${asig.archivos.length} guía${asig.archivos.length !== 1 ? 's' : ''}</span>
+    </div>
+    <div class="grid-archivos stagger">
+      ${asig.archivos.map(f => `
+        <a class="archivo-card" href="${f.archivo}">
+          <div class="archivo-icon" style="background:${asig.color}22">${asig.icon}</div>
+          <div class="archivo-info">
+            <h4>${f.nombre}</h4>
+            <p>${asig.nombre} · ${cu.nombre} · ${col.nombre}</p>
+          </div>
+          <span class="archivo-arrow">›</span>
+        </a>`).join('')}
+    </div>`;
 }
 
-function navTo(level, colegio, curso, asignatura) {
-  state = { level, colegio: colegio||null, curso: curso||null, asignatura: asignatura||null };
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function goHome() {
-  state = { level:'colegios', colegio:null, curso:null, asignatura:null };
-  document.getElementById('search-input').value = '';
-  render();
-}
-
-function goBack(level) { navTo(level, state.colegio, state.curso); }
-
-function renderBreadcrumb(items) {
-  const bc = document.getElementById('breadcrumb');
-  let html = `<span onclick="goHome()">Inicio</span>`;
-  items.forEach((item, i) => {
-    html += `<span class="sep">›</span><span class="${i===items.length-1?'active':''}" onclick="${item.action}">${item.label}</span>`;
-  });
-  bc.innerHTML = html;
-}
-
-// ─────────────────────────────────────────────
-// SEARCH (flat search across all files)
-// ─────────────────────────────────────────────
+// ── Search ─────────────────────────────────────────────
 function handleSearch() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
-  const main = document.getElementById('main-content');
-  if (!q) { render(); return; }
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) { navTo({}); return; }
+  navTo({ q });
+}
 
+function renderSearch(q, main) {
+  const ql = q.toLowerCase();
   const results = [];
   DATA.forEach(col => {
     col.cursos.forEach(cu => {
       cu.asignaturas.forEach(asig => {
         asig.archivos.forEach(f => {
-          if (
-            f.nombre.toLowerCase().includes(q) ||
-            asig.nombre.toLowerCase().includes(q) ||
-            cu.nombre.toLowerCase().includes(q) ||
-            col.nombre.toLowerCase().includes(q)
-          ) {
-            results.push({col, cu, asig, f});
+          if ([f.nombre, asig.nombre, cu.nombre, col.nombre].some(s => s.toLowerCase().includes(ql))) {
+            results.push({ col, cu, asig, f });
           }
         });
       });
     });
   });
 
-  renderBreadcrumb([{label:`Búsqueda: "${q}"`, action:''}]);
-
-  if (results.length === 0) {
+  if (!results.length) {
     main.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>Sin resultados</h3><p>No encontramos guías para "<strong>${q}</strong>"</p></div>`;
     return;
   }
-
   main.innerHTML = `
     <div class="sec-header">
       <h2>Resultados</h2>
@@ -612,13 +380,46 @@ function handleSearch() {
             <p>${r.asig.nombre} · ${r.cu.nombre} · ${r.col.nombre}</p>
           </div>
           <span class="archivo-arrow">›</span>
-        </a>
-      `).join('')}
+        </a>`).join('')}
     </div>`;
 }
 
-// ─── INIT ───
-render();
+// ── Breadcrumb ─────────────────────────────────────────
+function renderBreadcrumb(items) {
+  const bc = document.getElementById('breadcrumb');
+  const parts = [{ label: 'Inicio', params: {} }, ...items];
+  bc.innerHTML = parts.map((item, i) => {
+    const isLast = i === parts.length - 1;
+    const sep = i > 0 ? '<span class="sep">›</span>' : '';
+    const cls = isLast ? 'active' : '';
+    const click = isLast ? '' : `onclick="navTo(${JSON.stringify(item.params)})"`;
+    return `${sep}<span class="${cls}" ${click}>${item.label}</span>`;
+  }).join('');
+}
+
+// ── Helpers ────────────────────────────────────────────
+function notFound(msg) {
+  return `<div class="empty"><div class="empty-icon">🗺</div><h3>${msg}</h3><p>Verifica la URL o vuelve al inicio.</p></div>`;
+}
+
+// ── Boot: load data.json then render ──────────────────
+fetch('data.json')
+  .then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  })
+  .then(json => {
+    DATA = json;
+    navTo(getParams(), false);
+  })
+  .catch(err => {
+    document.getElementById('main-content').innerHTML = `
+      <div class="error-box">
+        <h3>⚠️ No se pudo cargar data.json</h3>
+        <p>${err.message}</p>
+        <p style="margin-top:8px">Asegúrate de que <code>data.json</code> está en la misma carpeta que <code>index.html</code> y que estás sirviendo el sitio desde un servidor (no abriendo el archivo directamente).</p>
+      </div>`;
+  });
 </script>
 </body>
 </html>
