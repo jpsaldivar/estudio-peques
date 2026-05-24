@@ -1,0 +1,616 @@
+
+<h2 class="sr-only">Interactive English study guide v3 — Unit 2: Why do landscapes change? — 6th grade</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.w{padding:1.5rem 1rem;max-width:700px;margin:0 auto}
+
+.hero{border-radius:var(--border-radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.5rem;background:linear-gradient(135deg,#0F6E56,#085041);position:relative;overflow:hidden}
+.hero::after{content:"🌍";position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-size:60px;opacity:.2}
+.hero .badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 12px;font-size:12px;color:#9FE1CB;margin-bottom:8px;font-weight:500}
+.hero h1{font-size:22px;font-weight:500;color:#fff;margin-bottom:4px}
+.hero p{font-size:13px;color:#5DCAA5}
+
+.tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 18px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s;font-weight:500}
+.tab.on{background:#0F6E56;color:#fff;border-color:#0F6E56}
+
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+.card h3{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.hint{font-size:12px;color:var(--color-text-tertiary);margin-bottom:.75rem}
+
+/* ── VOCAB WRITE ── */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.vcard{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:1rem;background:var(--color-background-secondary);transition:border-color .2s}
+.vcard.ok{border-color:#1D9E75;background:#E1F5EE}
+.vcard.bad{border-color:#E24B4A;background:#FCEBEB}
+.vcard .emoji{font-size:26px;margin-bottom:6px}
+.vcard .word{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
+.vcard input{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 10px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);outline:none;transition:border-color .2s}
+.vcard input:focus{border-color:#1D9E75}
+.vcard.ok input{border-color:#1D9E75;background:#EAF3DE;color:#3B6D11}
+.vcard.bad input{border-color:#E24B4A;background:#FCEBEB;color:#A32D2D}
+.vcard .vfb{font-size:11px;margin-top:5px;min-height:16px;color:var(--color-text-tertiary)}
+.vcard.ok .vfb{color:#3B6D11}
+.vcard.bad .vfb{color:#A32D2D}
+.check-all{background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-md);padding:9px 22px;font-size:13px;cursor:pointer;margin-top:1rem}
+.check-all:hover{background:#085041}
+.vocab-score{margin-top:.75rem;font-size:13px;color:var(--color-text-secondary);display:none}
+.vocab-score span{font-weight:500;color:#0F6E56}
+.reset-btn{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 16px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);margin-left:8px}
+
+/* ── GRAMMAR EXPLAINER ── */
+.rule-box{border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-bottom:.75rem;border-left:3px solid;border-top-left-radius:0;border-bottom-left-radius:0}
+.rule-box.short{background:#E1F5EE;border-color:#1D9E75}
+.rule-box.long{background:#E6F1FB;border-color:#378ADD}
+.rule-box.irreg{background:#FAEEDA;border-color:#EF9F27}
+.rule-box h4{font-size:14px;font-weight:500;margin-bottom:6px}
+.rule-box.short h4{color:#085041}
+.rule-box.long h4{color:#0C447C}
+.rule-box.irreg h4{color:#633806}
+.rule-box p{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+code{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary)}
+.hl{font-weight:500;color:#0F6E56}
+
+.build-area{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.build-sentence{font-size:16px;color:var(--color-text-primary);margin-bottom:1rem;line-height:2;min-height:36px}
+.blank-inp{border:none;border-bottom:2px solid #1D9E75;background:transparent;font-size:15px;color:var(--color-text-primary);outline:none;min-width:120px;padding:2px 4px;font-family:var(--font-sans)}
+.blank-inp.ok{border-color:#3B6D11;color:#3B6D11}
+.blank-inp.bad{border-color:#E24B4A;color:#A32D2D}
+.build-row{padding:.75rem 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.build-row:last-child{border:none}
+.build-hint{font-size:12px;color:var(--color-text-tertiary);margin-top:4px}
+.build-hint.ok{color:#3B6D11}
+.build-hint.bad{color:#A32D2D}
+
+/* ── DISASTERS EXPLAINER ── */
+.dis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:1rem}
+.dis-card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:1rem;text-align:center;cursor:pointer;transition:all .15s;background:var(--color-background-secondary)}
+.dis-card:hover,.dis-card.open{border-color:#1D9E75;background:#E1F5EE}
+.dis-card .di{font-size:28px;margin-bottom:6px}
+.dis-card .dw{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.dis-card .dd{font-size:12px;color:var(--color-text-secondary);margin-top:4px;line-height:1.4;display:none}
+.dis-card.open .dd{display:block}
+.climate-table{width:100%;border-collapse:collapse;font-size:13px}
+.climate-table th{text-align:left;padding:7px 10px;background:var(--color-background-secondary);color:var(--color-text-secondary);font-weight:500;font-size:12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.climate-table td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.climate-table tr:last-child td{border:none}
+.tag{display:inline-block;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:500}
+.tag-s{background:#E1F5EE;color:#085041}
+.tag-l{background:#E6F1FB;color:#0C447C}
+
+/* ── QUIZ ── */
+.score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.score-pill{background:var(--color-background-secondary);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.score-pill span{font-weight:500;color:#0F6E56}
+.prog{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.prog-fill{height:100%;background:#0F6E56;border-radius:3px;transition:width .3s}
+
+.qbox{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.qtype{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding:3px 10px;border-radius:20px;display:inline-block}
+.qt-mc{background:#E1F5EE;color:#085041}
+.qt-tf{background:#E6F1FB;color:#0C447C}
+.qt-fi{background:#FAEEDA;color:#633806}
+.qt-match{background:#FBEAF0;color:#72243E}
+.qt-order{background:#EAF3DE;color:#27500A}
+.qtext{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
+
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 14px;text-align:left;cursor:pointer;font-size:13px;color:var(--color-text-primary);transition:all .15s}
+.opt:hover:not(:disabled){border-color:#0F6E56;background:#E1F5EE;color:#085041}
+.opt.ok{background:#EAF3DE;border-color:#639922;color:#3B6D11;font-weight:500}
+.opt.bad{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
+
+.tf-btns{display:flex;gap:10px}
+.tf-btn{flex:1;padding:10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
+.tf-btn:hover:not(:disabled){background:var(--color-background-secondary)}
+.tf-btn.ok{background:#EAF3DE;border-color:#639922;color:#3B6D11}
+.tf-btn.bad{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
+
+.fi-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--color-text-primary);margin-bottom:.5rem}
+.fi-inp{border:none;border-bottom:2px solid #1D9E75;background:transparent;font-size:14px;color:var(--color-text-primary);outline:none;min-width:110px;padding:2px 4px;font-family:var(--font-sans)}
+.fi-inp.ok{border-color:#3B6D11;color:#3B6D11}
+.fi-inp.bad{border-color:#E24B4A;color:#A32D2D}
+.fi-check{background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;cursor:pointer}
+
+.match-area{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.match-col h5{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.match-item{padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:13px;cursor:pointer;margin-bottom:6px;transition:all .15s;color:var(--color-text-primary)}
+.match-item.selected{border-color:#0F6E56;background:#E1F5EE;color:#085041}
+.match-item.matched-ok{border-color:#639922;background:#EAF3DE;color:#3B6D11;cursor:default}
+.match-item.matched-bad{border-color:#E24B4A;background:#FCEBEB;color:#A32D2D}
+.match-item.disabled{opacity:.5;cursor:default}
+
+.order-items{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.order-item{padding:9px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:13px;cursor:grab;display:flex;align-items:center;gap:8px;color:var(--color-text-primary);user-select:none}
+.order-item:active{cursor:grabbing}
+.order-item.dragging{opacity:.4}
+.order-item.over{border-color:#0F6E56;background:#E1F5EE}
+.order-item.ok{border-color:#639922;background:#EAF3DE;color:#3B6D11}
+.order-item.bad{border-color:#E24B4A;background:#FCEBEB;color:#A32D2D}
+.drag-handle{color:var(--color-text-tertiary);font-size:16px}
+
+.qfb{margin-top:10px;font-size:13px;padding:8px 12px;border-radius:var(--border-radius-md);display:none}
+.qfb.show{display:block}
+.qfb.ok{background:#EAF3DE;color:#3B6D11}
+.qfb.bad{background:#FCEBEB;color:#A32D2D}
+.next-q{background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-md);padding:9px 20px;font-size:13px;cursor:pointer;margin-top:10px;display:none}
+.next-q.show{display:inline-block}
+
+.congrats{text-align:center;padding:2.5rem 1rem}
+.congrats .ce{font-size:52px;margin-bottom:12px}
+.congrats h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.congrats p{font-size:14px;color:var(--color-text-secondary);margin-bottom:16px}
+.restart{background:#0F6E56;color:#fff;border:none;border-radius:var(--border-radius-md);padding:10px 24px;font-size:14px;cursor:pointer}
+</style>
+
+<div class="w">
+
+<div class="hero">
+  <div class="badge">6° Básico · English · v3</div>
+  <h1>Why do landscapes change?</h1>
+  <p>Unit 2 · Interactive study guide · Test: 26 May</p>
+</div>
+
+<div class="tabs">
+  <button class="tab on"  onclick="showTab('vocab')">✍️ Vocabulary</button>
+  <button class="tab" onclick="showTab('grammar')">📐 Superlatives</button>
+  <button class="tab" onclick="showTab('disasters')">🌪 Climate</button>
+  <button class="tab" onclick="showTab('quiz')">🎯 Quiz</button>
+</div>
+
+<!-- ══════════ VOCABULARY WRITE ══════════ -->
+<div class="sec on" id="sec-vocab">
+  <div class="card">
+    <h3><i class="ti ti-pencil" aria-hidden="true"></i> Write the Spanish translation</h3>
+    <p class="hint">Type the meaning in Spanish for each word, then click "Check all". Accents are optional!</p>
+    <div class="vocab-grid" id="vocab-grid"></div>
+    <div style="margin-top:1rem;display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+      <button class="check-all" onclick="checkVocab()">Check all answers</button>
+      <button class="reset-btn" onclick="resetVocab()">Reset</button>
+    </div>
+    <div class="vocab-score" id="vocab-score">You got <span id="vscore">0</span> out of <span id="vtotal">0</span> correct!</div>
+  </div>
+</div>
+
+<!-- ══════════ GRAMMAR SUPERLATIVES ══════════ -->
+<div class="sec" id="sec-grammar">
+
+  <div class="card">
+    <h3><i class="ti ti-book-2" aria-hidden="true"></i> How to form superlatives</h3>
+    <div class="rule-box short">
+      <h4>Short adjectives → add <code>-est</code> <span class="tag tag-s">1 or 2 syllables</span></h4>
+      <p>Take the adjective, add <strong class="hl">the</strong> at the start and <strong class="hl">-est</strong> at the end.<br>
+      big → <strong class="hl">the big<u>gest</u></strong> · dry → <strong class="hl">the dri<u>est</u></strong> · long → <strong class="hl">the lon<u>gest</u></strong> · high → <strong class="hl">the high<u>est</u></strong><br>
+      <span style="font-size:12px">⚠️ Double the final consonant when the adjective ends in consonant-vowel-consonant: big → big<strong>g</strong>est, wet → wet<strong>t</strong>est</span></p>
+    </div>
+    <div class="rule-box long">
+      <h4>Long adjectives → use <code>the most</code> <span class="tag tag-l">3+ syllables</span></h4>
+      <p>Put <strong style="color:#185FA5">the most</strong> before the adjective. Never add -est.<br>
+      glacial → <strong style="color:#185FA5">the most glacial</strong> · arid → <strong style="color:#185FA5">the most arid</strong> · extreme → <strong style="color:#185FA5">the most extreme</strong></p>
+    </div>
+    <div class="rule-box irreg">
+      <h4>Irregular adjectives <span style="font-size:12px;font-weight:400;color:var(--color-text-secondary)">— must be memorised!</span></h4>
+      <p>good → <strong style="color:#633806">the best</strong> · bad → <strong style="color:#633806">the worst</strong></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="ti ti-writing" aria-hidden="true"></i> Complete the sentences</h3>
+    <p class="hint">Write the correct superlative form in the blank, then press Enter or click the check icon.</p>
+    <div class="build-area" id="build-area"></div>
+    <button class="check-all" onclick="checkBuild()">Check sentences</button>
+  </div>
+
+  <div class="card">
+    <h3><i class="ti ti-table" aria-hidden="true"></i> Quick reference table</h3>
+    <table class="climate-table">
+      <thead><tr><th>Adjective</th><th>Type</th><th>Superlative</th><th>Example</th></tr></thead>
+      <tbody id="sup-tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════ DISASTERS / CLIMATE ══════════ -->
+<div class="sec" id="sec-disasters">
+  <div class="card">
+    <h3><i class="ti ti-cloud-storm" aria-hidden="true"></i> Natural disasters — tap to reveal</h3>
+    <p class="hint">Tap each card to see the definition in English.</p>
+    <div class="dis-grid" id="dis-grid"></div>
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-map-2" aria-hidden="true"></i> Climate adjectives — what do they mean?</h3>
+    <table class="climate-table">
+      <thead><tr><th>Word</th><th>Meaning</th><th>Example sentence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>arid</strong></td><td>Very dry, little or no rain</td><td>The Atacama is <span class="hl">the most arid</span> desert in the world.</td></tr>
+        <tr><td><strong>glacial</strong></td><td>Very cold, related to ice/glaciers</td><td>Antarctica has <span class="hl">the most glacial</span> climate on Earth.</td></tr>
+        <tr><td><strong>dry</strong></td><td>Without much water or rain</td><td>The Sahara is <span class="hl">the driest</span> hot desert.</td></tr>
+        <tr><td><strong>wet</strong></td><td>With a lot of rain and water</td><td>The Amazon is <span class="hl">the wettest</span> rainforest.</td></tr>
+        <tr><td><strong>rocky</strong></td><td>Full of rocks and hard stone</td><td>Canyons are very rocky landscapes.</td></tr>
+        <tr><td><strong>extreme</strong></td><td>Very intense weather conditions</td><td>Puerto Rico has <span class="hl">the most extreme</span> storms.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3><i class="ti ti-world" aria-hidden="true"></i> North America & climate change</h3>
+    <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:.75rem">Remember the reading from Lesson 4! Climate change is affecting landscapes differently across North America:</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px">
+      <div style="background:#E1F5EE;border-radius:var(--border-radius-md);padding:.75rem;border:0.5px solid #5DCAA5"><div style="font-size:12px;font-weight:500;color:#085041;margin-bottom:4px">In the North (Arctic)</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5">Glaciers are melting → more snowstorms and glacial winds.</div></div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:.75rem;border:0.5px solid #FAC775"><div style="font-size:12px;font-weight:500;color:#633806;margin-bottom:4px">In the Centre (Colorado)</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5">Landscape getting more arid → longer droughts, wildfires.</div></div>
+      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:.75rem;border:0.5px solid #F09595"><div style="font-size:12px;font-weight:500;color:#791F1F;margin-bottom:4px">In the South (Puerto Rico)</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5">Hurricanes more frequent and violent → floods and strong winds.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ QUIZ MULTI-FORMAT ══════════ -->
+<div class="sec" id="sec-quiz">
+  <div class="score-bar">
+    <div class="score-pill">Score: <span id="qsc">0</span> / <span id="qtot">12</span></div>
+    <div class="prog"><div class="prog-fill" id="qpfill" style="width:0%"></div></div>
+  </div>
+  <div id="qcontainer"></div>
+  <div class="congrats" id="qcongrats" style="display:none">
+    <div class="ce" id="qcem">🌟</div>
+    <h2 id="qctit">Amazing!</h2>
+    <p id="qcmsg">You finished the quiz.</p>
+    <button class="restart" onclick="restartQ()">Try again!</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ══ VOCAB DATA ══ */
+const VOCAB=[
+  {w:"canyon",e:"🏜",es:["cañón","canon"]},
+  {w:"desert",e:"🏜",es:["desierto"]},
+  {w:"glacier",e:"🧊",es:["glaciar","glaciares"]},
+  {w:"mountain range",e:"⛰",es:["cordillera","cadena montañosa","sierra"]},
+  {w:"rainforest",e:"🌿",es:["selva tropical","selva","bosque tropical"]},
+  {w:"volcano",e:"🌋",es:["volcán"]},
+  {w:"waterfall",e:"💧",es:["cascada","catarata"]},
+  {w:"drought",e:"🌵",es:["sequía","sequia"]},
+  {w:"flood",e:"🌊",es:["inundación","inundacion"]},
+  {w:"hurricane",e:"🌀",es:["huracán","huracan"]},
+  {w:"snowstorm",e:"❄️",es:["tormenta de nieve","ventisca","nevada"]},
+  {w:"arid",e:"☀️",es:["árido","arido","seco"]},
+  {w:"glacial",e:"🥶",es:["glacial","helado","muy frío"]},
+  {w:"dry",e:"🏝",es:["seco"]},
+  {w:"rocky",e:"🪨",es:["rocoso","pedregoso"]},
+  {w:"wet",e:"🌧",es:["húmedo","humedo","mojado"]},
+]
+
+function buildVocab(){
+  const g=document.getElementById('vocab-grid')
+  g.innerHTML=''
+  VOCAB.forEach((v,i)=>{
+    g.innerHTML+=`<div class="vcard" id="vc-${i}">
+      <div class="emoji">${v.e}</div>
+      <div class="word">${v.w}</div>
+      <input type="text" id="vi-${i}" placeholder="traducción en español..." onkeydown="if(event.key==='Enter')checkVocab()">
+      <div class="vfb" id="vfb-${i}"></div>
+    </div>`
+  })
+  document.getElementById('vtotal').textContent=VOCAB.length
+  document.getElementById('vocab-score').style.display='none'
+}
+
+function normalize(s){return s.toLowerCase().trim().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/[ñ]/g,'n')}
+
+function checkVocab(){
+  let correct=0
+  VOCAB.forEach((v,i)=>{
+    const inp=document.getElementById('vi-'+i)
+    const card=document.getElementById('vc-'+i)
+    const fb=document.getElementById('vfb-'+i)
+    const val=inp.value.trim()
+    if(!val){card.classList.remove('ok','bad');fb.textContent='';return}
+    const norm=normalize(val)
+    const hit=v.es.some(a=>normalize(a)===norm||normalize(a).includes(norm)||norm.includes(normalize(a).split(' ')[0]))
+    if(hit){card.classList.add('ok');card.classList.remove('bad');inp.classList.add('ok');inp.classList.remove('bad');fb.textContent='✅ Correct!';correct++}
+    else{card.classList.add('bad');card.classList.remove('ok');inp.classList.add('bad');inp.classList.remove('ok');fb.textContent='❌ → '+v.es[0]}
+  })
+  const filled=VOCAB.filter((_,i)=>document.getElementById('vi-'+i).value.trim()).length
+  document.getElementById('vscore').textContent=correct
+  document.getElementById('vtotal').textContent=filled
+  document.getElementById('vocab-score').style.display='block'
+}
+
+function resetVocab(){
+  VOCAB.forEach((_,i)=>{
+    const inp=document.getElementById('vi-'+i)
+    const card=document.getElementById('vc-'+i)
+    inp.value='';inp.className='';card.className='vcard'
+    document.getElementById('vfb-'+i).textContent=''
+  })
+  document.getElementById('vocab-score').style.display='none'
+}
+
+/* ══ BUILD / FILL-IN DATA ══ */
+const BUILD=[
+  {before:"The Andes is",blank:"the longest",after:"mountain range on Earth.",hint:"long → lon___est"},
+  {before:"The Atacama is",blank:"the driest",after:"desert in the world.",hint:"dry → irregular spelling → dri___est"},
+  {before:"Antarctica has",blank:"the most glacial",after:"climate on the planet.",hint:"glacial = long adjective → the most ___"},
+  {before:"The Amazon is",blank:"the biggest",after:"rainforest in the world.",hint:"big → double g → big___est"},
+  {before:"Angel Falls is",blank:"the highest",after:"waterfall on Earth.",hint:"high → high___est"},
+]
+
+function buildFill(){
+  const a=document.getElementById('build-area')
+  a.innerHTML=BUILD.map((b,i)=>`<div class="build-row">
+    <div class="build-sentence">${b.before} <input class="blank-inp" id="bi-${i}" placeholder="superlative..." data-ans="${b.blank}" onkeydown="if(event.key==='Enter')checkBuild()"> ${b.after}</div>
+    <div class="build-hint" id="bh-${i}">💡 Hint: ${b.hint}</div>
+  </div>`).join('')
+}
+
+function checkBuild(){
+  BUILD.forEach((b,i)=>{
+    const inp=document.getElementById('bi-'+i)
+    const hint=document.getElementById('bh-'+i)
+    const val=normalize(inp.value)
+    const ans=normalize(b.blank)
+    inp.classList.remove('ok','bad')
+    if(!inp.value.trim()){hint.className='build-hint';hint.textContent='💡 Hint: '+b.hint;return}
+    if(val===ans||ans.includes(val)&&val.length>3){inp.classList.add('ok');hint.className='build-hint ok';hint.textContent='✅ Correct! → '+b.blank}
+    else{inp.classList.add('bad');hint.className='build-hint bad';hint.textContent='❌ The answer is: '+b.blank}
+  })
+}
+
+/* ══ SUPERLATIVES TABLE ══ */
+const SUPS=[
+  {adj:"big",type:"short",sup:"the biggest",ex:"The Amazon is the biggest rainforest."},
+  {adj:"dry",type:"short",sup:"the driest",ex:"The Atacama is the driest desert."},
+  {adj:"long",type:"short",sup:"the longest",ex:"The Andes is the longest range."},
+  {adj:"high",type:"short",sup:"the highest",ex:"Angel Falls is the highest waterfall."},
+  {adj:"large",type:"short",sup:"the largest",ex:"The Sahara is the largest desert."},
+  {adj:"wet",type:"short",sup:"the wettest",ex:"The Amazon is the wettest region."},
+  {adj:"glacial",type:"long",sup:"the most glacial",ex:"Antarctica has the most glacial climate."},
+  {adj:"arid",type:"long",sup:"the most arid",ex:"The Atacama is the most arid region."},
+  {adj:"extreme",type:"long",sup:"the most extreme",ex:"Puerto Rico has the most extreme storms."},
+  {adj:"good",type:"irreg",sup:"the best",ex:"What is the best landscape?"},
+  {adj:"bad",type:"worst",sup:"the worst",ex:"Drought is the worst type of weather."},
+]
+function buildSupTable(){
+  const tb=document.getElementById('sup-tbody')
+  tb.innerHTML=SUPS.map(s=>{
+    const tag=s.type==='short'?'<span class="tag tag-s">short</span>':s.type==='long'?'<span class="tag tag-l">long</span>':'<span class="tag" style="background:#FAEEDA;color:#633806">irregular</span>'
+    return`<tr><td>${s.adj}</td><td>${tag}</td><td style="font-weight:500;color:#0F6E56">${s.sup}</td><td style="font-size:12px;color:var(--color-text-secondary)">${s.ex}</td></tr>`
+  }).join('')
+}
+
+/* ══ DISASTERS ══ */
+const DISASTERS=[
+  {w:"drought",e:"🌵",d:"A long period with very little or no rain. The land becomes very dry and cracked."},
+  {w:"flood",e:"🌊",d:"When too much water overflows onto land that is normally dry."},
+  {w:"hurricane",e:"🌀",d:"A massive tropical storm with extremely strong winds and heavy rain."},
+  {w:"snowstorm",e:"❄️",d:"A storm with heavy snowfall and strong winds, making it hard to see."},
+  {w:"arid",e:"🏜",d:"Adjective: describes a place that is very dry and receives very little rain."},
+  {w:"glacial",e:"🧊",d:"Adjective: extremely cold, like or related to a glacier. E.g. glacial winds."},
+]
+function buildDisasters(){
+  const g=document.getElementById('dis-grid')
+  g.innerHTML=DISASTERS.map((d,i)=>`<div class="dis-card" id="dc-${i}" onclick="this.classList.toggle('open')">
+    <div class="di">${d.e}</div><div class="dw">${d.w}</div>
+    <div class="dd">${d.d}</div>
+  </div>`).join('')
+}
+
+/* ══ QUIZ DATA ══ */
+/* Types: mc=multiple choice, tf=true/false, fi=fill-in, match=matching, order=drag-order */
+const QS=[
+  {type:"mc",q:"What is the superlative of 'big'?",opts:["the most big","the biggest","the bigest","the more big"],ans:1,fb:"Correct! Big is a short adjective: double the g and add -est → the biggest."},
+  {type:"tf",q:"True or False: 'The most arid' is the correct superlative of 'arid'.",ans:true,fb:"True! Arid has 2 syllables but behaves as a long adjective, so we use 'the most'."},
+  {type:"fi",before:"The Atacama Desert is",blank:"the driest",after:"hot desert in the world.",fb:"Great! dry → driest (irregular spelling: y → iest)."},
+  {type:"mc",q:"Which natural disaster brings extremely strong winds above 250 km/h?",opts:["drought","flood","hurricane","snowstorm"],ans:2,fb:"Correct! Hurricanes are tropical storms with winds above 250 km/h, common in Puerto Rico."},
+  {type:"match",q:"Match each word with its Spanish meaning.",pairs:[["canyon","cañón"],["glacier","glaciar"],["waterfall","cascada"],["rainforest","selva tropical"]],fb:"Well done! These are key landscape words for the unit."},
+  {type:"tf",q:"True or False: The Sahara is the biggest cold desert in the world.",ans:false,fb:"False! Antarctica is the biggest cold desert. The Sahara is the largest HOT desert."},
+  {type:"mc",q:"Complete: 'The Amazon __ the biggest rainforest.'",opts:["are","is","isn't","aren't"],ans:1,fb:"Correct! We use 'is' with singular subjects like 'The Amazon'."},
+  {type:"fi",before:"Antarctica has",blank:"the most glacial",after:"climate on Earth.",fb:"Perfect! Glacial is a long adjective (3 syllables), so we use 'the most'."},
+  {type:"mc",q:"How is climate change affecting Colorado?",opts:["More hurricanes","Glaciers melting faster","More arid landscape and longer droughts","More flooding in cities"],ans:2,fb:"Right! Colorado is becoming more arid due to climate change, causing longer droughts and wildfires."},
+  {type:"order",q:"Put the superlatives in order from WEAKEST rule to STRONGEST rule.",items:["the best (irregular)","the most extreme (long)","the highest (short)"],correct:[2,1,0],fb:"Short adjectives use -est, long adjectives use 'the most', and irregular ones must be memorised!"},
+  {type:"mc",q:"Which sentence is correct?",opts:["The Andes is the most long mountain range.","The Andes is the longest mountain range.","The Andes is the longgest mountain range.","The Andes are the longest mountain range."],ans:1,fb:"Correct! Long is a short adjective → the longest. Also, 'The Andes' uses 'is' as a single range."},
+  {type:"tf",q:"True or False: Angel Falls is the highest waterfall in the world.",ans:true,fb:"True! Angel Falls in Venezuela is the world's highest waterfall, at 979 metres."},
+]
+
+let qi=0,qsc=0,matchState={}
+
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'))
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'))
+  document.getElementById('sec-'+id).classList.add('on')
+  event.target.classList.add('on')
+}
+
+/* ══ QUIZ RENDER ══ */
+function renderQ(){
+  const c=document.getElementById('qcontainer')
+  if(qi>=QS.length){showCongrats();return}
+  const q=QS[qi]
+  document.getElementById('qtot').textContent=QS.length
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('qpfill').style.width=Math.round(qi/QS.length*100)+'%'
+
+  let inner=''
+  const typeLabel={mc:'Multiple choice',tf:'True or false',fi:'Fill in the blank',match:'Matching',order:'Put in order'}
+  const typeCls={mc:'qt-mc',tf:'qt-tf',fi:'qt-fi',match:'qt-match',order:'qt-order'}
+
+  if(q.type==='mc'){
+    inner=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selMC(this,${i},${q.ans},'${esc(q.fb)}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>`
+  } else if(q.type==='tf'){
+    inner=`<div class="tf-btns">
+      <button class="tf-btn" onclick="selTF(this,true,${q.ans},'${esc(q.fb)}')">✅ True</button>
+      <button class="tf-btn" onclick="selTF(this,false,${q.ans},'${esc(q.fb)}')">❌ False</button>
+    </div>`
+  } else if(q.type==='fi'){
+    inner=`<div class="fi-row">${q.before} <input class="fi-inp" id="fi-inp" placeholder="type here..." onkeydown="if(event.key==='Enter')checkFI('${esc(q.blank)}','${esc(q.fb)}')"> ${q.after}</div>
+    <button class="fi-check" onclick="checkFI('${esc(q.blank)}','${esc(q.fb)}')">Check</button>`
+  } else if(q.type==='match'){
+    matchState={left:q.pairs.map(p=>p[0]),right:q.pairs.map(p=>p[1]).sort(()=>Math.random()-.5),sel:null,done:[]}
+    inner=buildMatch(q,matchState)
+  } else if(q.type==='order'){
+    inner=buildOrder(q)
+  }
+
+  c.innerHTML=`<div class="qbox">
+    <div><span class="qtype ${typeCls[q.type]}">${typeLabel[q.type]}</span></div>
+    <div class="qtext">${qi+1}. ${q.q}</div>
+    ${inner}
+    <div class="qfb" id="qfb"></div>
+  </div>
+  <button class="next-q" id="nxq" onclick="nextQ()">Next question →</button>`
+
+  if(q.type==='order') initDrag()
+}
+
+function esc(s){return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;')}
+
+function selMC(btn,idx,ans,fb){
+  btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.disabled=true)
+  const ok=idx===ans
+  btn.classList.add(ok?'ok':'bad')
+  if(!ok)btn.closest('.opts').querySelectorAll('.opt')[ans].classList.add('ok')
+  showFB(ok,fb)
+  if(ok)qsc++
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('nxq').classList.add('show')
+}
+
+function selTF(btn,val,ans,fb){
+  btn.closest('.tf-btns').querySelectorAll('.tf-btn').forEach(b=>b.disabled=true)
+  const ok=val===ans
+  btn.classList.add(ok?'ok':'bad')
+  if(!ok)btn.closest('.tf-btns').querySelector('.tf-btn:'+(val?'last-child':'first-child')).classList.add('ok')
+  showFB(ok,fb)
+  if(ok)qsc++
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('nxq').classList.add('show')
+}
+
+function checkFI(blank,fb){
+  const inp=document.getElementById('fi-inp')
+  if(!inp||!inp.value.trim())return
+  const ok=normalize(inp.value)===normalize(blank)||normalize(blank).includes(normalize(inp.value))&&normalize(inp.value).length>4
+  inp.classList.add(ok?'ok':'bad')
+  inp.disabled=true
+  if(!ok){const span=document.createElement('span');span.style.cssText='font-size:13px;color:#085041;margin-left:8px;font-weight:500';span.textContent='→ '+blank;inp.parentNode.insertBefore(span,inp.nextSibling)}
+  showFB(ok,fb)
+  if(ok)qsc++
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('nxq').classList.add('show')
+}
+
+/* ── Match ── */
+function buildMatch(q){
+  return`<div class="match-area">
+    <div class="match-col"><h5>English</h5>${matchState.left.map((w,i)=>`<div class="match-item" id="ml-${i}" onclick="matchSel('left',${i},'${w}')">${w}</div>`).join('')}</div>
+    <div class="match-col"><h5>Español</h5>${matchState.right.map((w,i)=>`<div class="match-item" id="mr-${i}" onclick="matchSel('right',${i},'${w}')">${w}</div>`).join('')}</div>
+  </div>
+  <button class="fi-check" id="match-check" style="display:none" onclick="checkMatch('${esc(q?q.fb:QS[qi].fb)}')">Check matches</button>`
+}
+
+function matchSel(side,idx,word){
+  const el=document.getElementById((side==='left'?'ml-':'mr-')+idx)
+  if(el.classList.contains('matched-ok')||el.classList.contains('matched-bad'))return
+  if(matchState.sel&&matchState.sel.side===side){
+    const prev=document.getElementById((matchState.sel.side==='left'?'ml-':'mr-')+matchState.sel.idx)
+    prev.classList.remove('selected')
+    matchState.sel=null
+  }
+  if(matchState.sel&&matchState.sel.side!==side){
+    const other=matchState.sel
+    matchState.done.push({left:side==='right'?other.word:word,right:side==='right'?word:other.word,li:side==='right'?other.idx:idx,ri:side==='right'?idx:other.idx})
+    document.getElementById('ml-'+(side==='right'?other.idx:idx)).classList.remove('selected')
+    document.getElementById('mr-'+(side==='right'?idx:other.idx)).classList.remove('selected')
+    document.getElementById('ml-'+(side==='right'?other.idx:idx)).classList.add('disabled')
+    document.getElementById('mr-'+(side==='right'?idx:other.idx)).classList.add('disabled')
+    matchState.sel=null
+    if(matchState.done.length===matchState.left.length)document.getElementById('match-check').style.display='inline-block'
+  } else {
+    el.classList.add('selected')
+    matchState.sel={side,idx,word}
+  }
+}
+
+function checkMatch(fb){
+  const q=QS[qi]
+  let ok=true
+  matchState.done.forEach(p=>{
+    const correct=q.pairs.some(pair=>pair[0]===p.left&&pair[1]===p.right)
+    document.getElementById('ml-'+p.li).classList.remove('disabled')
+    document.getElementById('mr-'+p.ri).classList.remove('disabled')
+    document.getElementById('ml-'+p.li).classList.add(correct?'matched-ok':'matched-bad')
+    document.getElementById('mr-'+p.ri).classList.add(correct?'matched-ok':'matched-bad')
+    if(!correct)ok=false
+  })
+  document.getElementById('match-check').disabled=true
+  showFB(ok,fb)
+  if(ok)qsc++
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('nxq').classList.add('show')
+}
+
+/* ── Drag order ── */
+let dragSrc=null
+function buildOrder(q){
+  const shuffled=[...q.items].sort(()=>Math.random()-.5)
+  return`<div class="order-items" id="order-list">${shuffled.map((item,i)=>`<div class="order-item" draggable="true" data-item="${esc(item)}" id="oi-${i}"><span class="drag-handle"><i class="ti ti-grip-vertical" aria-hidden="true"></i></span>${item}</div>`).join('')}</div>
+  <button class="fi-check" onclick="checkOrder('${esc(q.fb)}')">Check order</button>`
+}
+function initDrag(){
+  document.querySelectorAll('.order-item').forEach(el=>{
+    el.addEventListener('dragstart',e=>{dragSrc=el;el.classList.add('dragging')})
+    el.addEventListener('dragend',e=>{el.classList.remove('dragging');document.querySelectorAll('.order-item').forEach(x=>x.classList.remove('over'))})
+    el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over')})
+    el.addEventListener('dragleave',e=>el.classList.remove('over'))
+    el.addEventListener('drop',e=>{
+      e.preventDefault();el.classList.remove('over')
+      if(dragSrc===el)return
+      const list=document.getElementById('order-list')
+      const items=[...list.querySelectorAll('.order-item')]
+      const si=items.indexOf(dragSrc),ti=items.indexOf(el)
+      if(si<ti)list.insertBefore(dragSrc,el.nextSibling)
+      else list.insertBefore(dragSrc,el)
+    })
+  })
+}
+function checkOrder(fb){
+  const q=QS[qi]
+  const items=[...document.querySelectorAll('.order-item')].map(el=>el.dataset.item)
+  const correctOrder=q.correct.map(i=>q.items[i])
+  let allOk=true
+  items.forEach((item,i)=>{
+    const el=document.querySelector(`.order-item[data-item="${item}"]`)
+    const ok=item===correctOrder[i]
+    el.classList.add(ok?'ok':'bad')
+    if(!ok)allOk=false
+  })
+  document.querySelector('#order-list + .fi-check').disabled=true
+  showFB(allOk,fb)
+  if(allOk)qsc++
+  document.getElementById('qsc').textContent=qsc
+  document.getElementById('nxq').classList.add('show')
+}
+
+function showFB(ok,msg){
+  const fb=document.getElementById('qfb')
+  fb.textContent=(ok?'✅ ':'❌ ')+msg
+  fb.className='qfb show '+(ok?'ok':'bad')
+}
+function nextQ(){qi++;renderQ()}
+function showCongrats(){
+  document.getElementById('qcontainer').style.display='none'
+  document.getElementById('qpfill').style.width='100%'
+  const pct=qsc/QS.length
+  document.getElementById('qcem').textContent=pct>=.9?'🌟':pct>=.7?'🎉':'💪'
+  document.getElementById('qctit').textContent=pct>=.9?'Amazing! You are ready!':pct>=.7?'Great work!':'Keep practising!'
+  document.getElementById('qcmsg').textContent=`You scored ${qsc} out of ${QS.length}. ${pct>=.7?'You are ready for the test!':'Review vocabulary and superlatives and try again.'}`
+  document.getElementById('qcongrats').style.display='block'
+}
+function restartQ(){qi=0;qsc=0;document.getElementById('qcontainer').style.display='block';document.getElementById('qcongrats').style.display='none';renderQ()}
+
+/* ══ INIT ══ */
+buildVocab();buildFill();buildSupTable();buildDisasters();renderQ()
+</script>
