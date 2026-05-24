@@ -438,15 +438,15 @@ function renderQ(){
   const typeCls={mc:'qt-mc',tf:'qt-tf',fi:'qt-fi',match:'qt-match',order:'qt-order'}
 
   if(q.type==='mc'){
-    inner=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selMC(this,${i},${q.ans},'${esc(q.fb)}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>`
+    inner=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selMC(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>`
   } else if(q.type==='tf'){
     inner=`<div class="tf-btns">
-      <button class="tf-btn" onclick="selTF(this,true,${q.ans},'${esc(q.fb)}')">✅ True</button>
-      <button class="tf-btn" onclick="selTF(this,false,${q.ans},'${esc(q.fb)}')">❌ False</button>
+      <button class="tf-btn" onclick="selTF(this,true,${q.ans})">✅ True</button>
+      <button class="tf-btn" onclick="selTF(this,false,${q.ans})">❌ False</button>
     </div>`
   } else if(q.type==='fi'){
-    inner=`<div class="fi-row">${q.before} <input class="fi-inp" id="fi-inp" placeholder="type here..." onkeydown="if(event.key==='Enter')checkFI('${esc(q.blank)}','${esc(q.fb)}')"> ${q.after}</div>
-    <button class="fi-check" onclick="checkFI('${esc(q.blank)}','${esc(q.fb)}')">Check</button>`
+    inner=`<div class="fi-row">${q.before} <input class="fi-inp" id="fi-inp" placeholder="type here..." onkeydown="if(event.key==='Enter')checkFI('${esc(q.blank)}')"> ${q.after}</div>
+    <button class="fi-check" onclick="checkFI('${esc(q.blank)}')">Check</button>`
   } else if(q.type==='match'){
     matchState={left:q.pairs.map(p=>p[0]),right:q.pairs.map(p=>p[1]).sort(()=>Math.random()-.5),sel:null,done:[]}
     inner=buildMatch(q,matchState)
@@ -467,7 +467,8 @@ function renderQ(){
 
 function esc(s){return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;')}
 
-function selMC(btn,idx,ans,fb){
+function selMC(btn,idx,ans){
+  const fb=QS[qi].fb
   btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.disabled=true)
   const ok=idx===ans
   btn.classList.add(ok?'ok':'bad')
@@ -478,7 +479,8 @@ function selMC(btn,idx,ans,fb){
   document.getElementById('nxq').classList.add('show')
 }
 
-function selTF(btn,val,ans,fb){
+function selTF(btn,val,ans){
+  const fb=QS[qi].fb
   btn.closest('.tf-btns').querySelectorAll('.tf-btn').forEach(b=>b.disabled=true)
   const ok=val===ans
   btn.classList.add(ok?'ok':'bad')
@@ -489,7 +491,8 @@ function selTF(btn,val,ans,fb){
   document.getElementById('nxq').classList.add('show')
 }
 
-function checkFI(blank,fb){
+function checkFI(blank){
+  const fb=QS[qi].fb
   const inp=document.getElementById('fi-inp')
   if(!inp||!inp.value.trim())return
   const ok=normalize(inp.value)===normalize(blank)||normalize(blank).includes(normalize(inp.value))&&normalize(inp.value).length>4
@@ -508,7 +511,7 @@ function buildMatch(q){
     <div class="match-col"><h5>English</h5>${matchState.left.map((w,i)=>`<div class="match-item" id="ml-${i}" onclick="matchSel('left',${i},'${w}')">${w}</div>`).join('')}</div>
     <div class="match-col"><h5>Español</h5>${matchState.right.map((w,i)=>`<div class="match-item" id="mr-${i}" onclick="matchSel('right',${i},'${w}')">${w}</div>`).join('')}</div>
   </div>
-  <button class="fi-check" id="match-check" style="display:none" onclick="checkMatch('${esc(q?q.fb:QS[qi].fb)}')">Check matches</button>`
+  <button class="fi-check" id="match-check" style="display:none" onclick="checkMatch()">Check matches</button>`
 }
 
 function matchSel(side,idx,word){
@@ -534,8 +537,9 @@ function matchSel(side,idx,word){
   }
 }
 
-function checkMatch(fb){
+function checkMatch(){
   const q=QS[qi]
+  const fb=q.fb
   let ok=true
   matchState.done.forEach(p=>{
     const correct=q.pairs.some(pair=>pair[0]===p.left&&pair[1]===p.right)
@@ -557,7 +561,7 @@ let dragSrc=null
 function buildOrder(q){
   const shuffled=[...q.items].sort(()=>Math.random()-.5)
   return`<div class="order-items" id="order-list">${shuffled.map((item,i)=>`<div class="order-item" draggable="true" data-item="${esc(item)}" id="oi-${i}"><span class="drag-handle"><i class="ti ti-grip-vertical" aria-hidden="true"></i></span>${item}</div>`).join('')}</div>
-  <button class="fi-check" onclick="checkOrder('${esc(q.fb)}')">Check order</button>`
+  <button class="fi-check" onclick="checkOrder()">Check order</button>`
 }
 function initDrag(){
   document.querySelectorAll('.order-item').forEach(el=>{
@@ -576,8 +580,9 @@ function initDrag(){
     })
   })
 }
-function checkOrder(fb){
+function checkOrder(){
   const q=QS[qi]
+  const fb=q.fb
   const items=[...document.querySelectorAll('.order-item')].map(el=>el.dataset.item)
   const correctOrder=q.correct.map(i=>q.items[i])
   let allOk=true

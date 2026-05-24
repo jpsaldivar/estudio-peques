@@ -427,12 +427,13 @@ function renderQ(){
   document.getElementById('pfill').style.width=(qi/QS.length*100)+'%'
   c.innerHTML=`<div class="qbox">
     <div class="qtext">${qi+1}. ${q.q}</div>
-    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selOpt(this,${i},${q.ans},'${q.fb.replace(/'/g,"&#39;")}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selOpt(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
     <div class="qfb" id="qfb"></div>
   </div>
   <button class="next-q" id="nxq" onclick="nextQ()">Siguiente pregunta →</button>`
 }
-function selOpt(btn,idx,ans,fb){
+function selOpt(btn,idx,ans){
+  const fb=QS[qi].fb
   btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.disabled=true)
   const fbEl=document.getElementById('qfb')
   if(idx===ans){btn.classList.add('ok');fbEl.textContent='✅ '+fb;fbEl.className='qfb show ok';sc++}
