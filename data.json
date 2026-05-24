@@ -26,6 +26,10 @@
             "icon": "📖",
             "color": "#27ae60",
             "archivos": [
+              {
+                "nombre": "Lenguaje 3ro Mitos Leyendas Pronombres",
+                "archivo": "altomonte/3ro/lenguaje/lenguaje_3ro_mitos_leyendas_pronombres.html"
+              }
             ]
           },
           {
@@ -33,8 +37,7 @@
             "nombre": "Ciencias",
             "icon": "🔬",
             "color": "#16a085",
-            "archivos": [
-            ]
+            "archivos": []
           }
         ]
       },
@@ -51,9 +54,14 @@
             "icon": "🌍",
             "color": "#1D9E75",
             "archivos": [
-              { "nombre": "Unit 2 – Why do landscapes change?", "archivo": "altomonte/6to/ingles/unit-2.html" },
-              { "nombre": "Unit 2 – Why do landscapes change? - Opción 2", "archivo": "altomonte/6to/ingles/unit-2-v2.html" }
-
+              {
+                "nombre": "Unit 2 – Why do landscapes change?",
+                "archivo": "altomonte/6to/ingles/unit-2.html"
+              },
+              {
+                "nombre": "Unit 2 – Why do landscapes change? - Opción 2",
+                "archivo": "altomonte/6to/ingles/unit-2-v2.html"
+              }
             ]
           },
           {
@@ -61,24 +69,21 @@
             "nombre": "Matemáticas",
             "icon": "🔢",
             "color": "#e74c8b",
-            "archivos": [
-            ]
+            "archivos": []
           },
           {
             "id": "historia",
             "nombre": "Historia",
             "icon": "🏛",
             "color": "#e67e22",
-            "archivos": [
-            ]
+            "archivos": []
           },
           {
             "id": "ciencias",
             "nombre": "Ciencias",
             "icon": "🔬",
             "color": "#16a085",
-            "archivos": [
-            ]
+            "archivos": []
           }
         ]
       }
