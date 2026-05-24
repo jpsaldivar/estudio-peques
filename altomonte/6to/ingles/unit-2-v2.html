@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expedición: Landscapes & Superlatives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estilos personalizados para animaciones y tarjetas */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
-        
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f0fdf4;
-            background-image: radial-gradient(#bbf7d0 1px, transparent 1px);
-            background-size: 20px 20px;
         }
 
-        /* Flip Card CSS */
+        /* Flip Card CSS — requiere preserve-3d y backface-visibility, no reemplazable con Tailwind */
         .flip-card {
             background-color: transparent;
             width: 100%;
@@ -64,7 +59,7 @@
             border: 2px solid #16a34a;
         }
 
-        /* Animación suave para botones */
+        /* Animación suave para botones — transform+scale en hover/active no disponible directamente en Tailwind sin config */
         .btn-hover {
             transition: all 0.2s ease-in-out;
         }
@@ -77,7 +72,8 @@
         }
     </style>
 </head>
-<body class="text-gray-800 pb-12">
+<body class="text-gray-800 pb-12 bg-[#f0fdf4]"
+      style="background-image: radial-gradient(#bbf7d0 1px, transparent 1px); background-size: 20px 20px;">
 
     <!-- Encabezado -->
     <header class="bg-green-600 text-white p-6 shadow-md rounded-b-3xl mb-8 relative overflow-hidden">
@@ -94,14 +90,14 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-4">
-        
+
         <!-- SECCIÓN 1: Repaso de Vocabulario (Flashcards) -->
         <section class="bg-white rounded-3xl p-6 md:p-8 shadow-xl mb-10 border-t-4 border-green-500">
             <h2 class="text-2xl md:text-3xl font-bold text-green-700 mb-2 flex items-center gap-2">
                 🏕️ Campamento de Repaso
             </h2>
             <p class="text-gray-600 mb-6 font-medium">Toca las tarjetas para descubrir el significado de las palabras clave. ¡Memorízalas!</p>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="flashcards-container">
                 <!-- Las tarjetas se generarán con JS -->
             </div>
@@ -113,7 +109,7 @@
                 📏 Superlative Rules
             </h2>
             <div class="grid md:grid-cols-2 gap-6">
-                
+
                 <!-- Short Adjectives -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-yellow-200">
                     <h3 class="text-xl font-bold text-blue-600 mb-3">⚡ Short Adjectives</h3>
@@ -148,7 +144,7 @@
                     🏆 Mini Geography Quiz 🏆
                 </h2>
                 <p class="text-center text-blue-100 mb-6 font-bold">¡Demuestra lo que aprendiste! Selecciona la alternativa correcta.</p>
-                
+
                 <!-- Contenedor del Quiz -->
                 <div id="quiz-container" class="bg-white text-gray-800 rounded-2xl p-6 md:p-8 shadow-inner">
                     <!-- Progreso -->
@@ -156,7 +152,7 @@
                         <span id="question-counter">Question 1 of 8</span>
                         <span id="score-display">Score: 0</span>
                     </div>
-                    
+
                     <!-- Pregunta -->
                     <h3 id="question-text" class="text-xl md:text-2xl font-bold text-blue-900 mb-6 leading-tight">
                         Loading question...
@@ -170,7 +166,7 @@
                     <!-- Mensaje de Feedback -->
                     <div id="feedback-msg" class="hidden mt-6 p-4 rounded-xl font-bold text-center text-lg">
                     </div>
-                    
+
                     <!-- Botón Siguiente -->
                     <button id="next-btn" class="hidden w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl btn-hover">
                         Next Question ➔
@@ -299,15 +295,15 @@
             canAnswer = true;
             nextBtn.classList.add('hidden');
             feedbackMsg.classList.add('hidden');
-            
+
             const currentQ = quizQuestions[currentQuestionIndex];
-            
+
             questionCounter.innerText = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
             scoreDisplay.innerText = `Score: ${score}`;
             questionText.innerText = currentQ.question;
-            
+
             optionsContainer.innerHTML = '';
-            
+
             currentQ.options.forEach((option, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 font-bold text-gray-700 transition-all duration-200';
@@ -320,16 +316,16 @@
         function checkAnswer(selectedIndex, btnElement) {
             if (!canAnswer) return;
             canAnswer = false;
-            
+
             const currentQ = quizQuestions[currentQuestionIndex];
             const isCorrect = selectedIndex === currentQ.correctAnswer;
-            
+
             // Estilos para los botones según si es correcto o no
             const allBtns = optionsContainer.children;
             for(let i=0; i<allBtns.length; i++){
                 allBtns[i].classList.remove('hover:border-blue-500', 'hover:bg-blue-50', 'cursor-pointer');
                 allBtns[i].classList.add('cursor-default', 'opacity-60');
-                
+
                 if(i === currentQ.correctAnswer) {
                     allBtns[i].classList.remove('border-gray-200', 'opacity-60');
                     allBtns[i].classList.add('border-green-500', 'bg-green-100', 'text-green-800');
@@ -366,9 +362,9 @@
         function showResults() {
             quizContainer.classList.add('hidden');
             resultContainer.classList.remove('hidden');
-            
+
             finalScoreDisplay.innerText = `${score} / ${quizQuestions.length}`;
-            
+
             if (score === quizQuestions.length) {
                 resultEmoji.innerText = "🏆👑";
                 resultMessage.innerText = "¡Puntaje perfecto! Eres una experta en Landscapes. ¡Sacarás un 7.0 seguro!";

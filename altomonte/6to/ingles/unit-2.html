@@ -1,138 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 2 · Inglés 6°</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Nunito', sans-serif; }
 
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); }
-  .guide-wrap { padding: 1.5rem 1rem; max-width: 680px; margin: 0 auto; }
+    /* Tab sections — toggled by JS */
+    .section { display: none; }
+    .section.active { display: block; }
 
-  .hero { background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; color: #E1F5EE; }
-  .hero h1 { font-size: 22px; font-weight: 500; color: #E1F5EE; margin-bottom: 4px; }
-  .hero p { font-size: 14px; color: #9FE1CB; }
-  .badge { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: #E1F5EE; margin-bottom: 8px; }
+    /* Vocab item — translation revealed on click */
+    .vocab-item .translation { display: none; }
+    .vocab-item.revealed .translation { display: block; }
+    .vocab-item.revealed {
+      border-color: #1D9E75;
+      background-color: #E1F5EE;
+    }
 
-  .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .tab { padding: 8px 16px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); font-size: 13px; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
-  .tab.active { background: #1D9E75; color: white; border-color: #1D9E75; font-weight: 500; }
+    /* Quiz feedback — shown by JS */
+    .feedback { display: none; }
+    .feedback.show { display: block; }
+    .feedback.ok { background: #EAF3DE; color: #3B6D11; }
+    .feedback.fail { background: #FCEBEB; color: #A32D2D; }
 
-  .section { display: none; }
-  .section.active { display: block; }
+    /* Quiz option button states */
+    .option-btn.correct { background: #EAF3DE; border-color: #639922; color: #3B6D11; font-weight: 500; }
+    .option-btn.wrong   { background: #FCEBEB; border-color: #E24B4A; color: #A32D2D; }
 
-  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .card-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-  .card-title i { color: #1D9E75; font-size: 18px; }
+    /* Next button — shown by JS */
+    .next-btn { display: none; }
+    .next-btn.show { display: inline-block; }
 
-  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-  .vocab-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; cursor: pointer; border: 0.5px solid var(--color-border-tertiary); transition: all 0.15s; }
-  .vocab-item:hover { border-color: #1D9E75; }
-  .vocab-item .word { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
-  .vocab-item .translation { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; display: none; }
-  .vocab-item .emoji { font-size: 20px; margin-bottom: 4px; }
-  .vocab-item.revealed .translation { display: block; }
-  .vocab-item.revealed { border-color: #1D9E75; background: #E1F5EE; }
+    /* Fill-in input states */
+    .fill-input.correct { border-color: #639922; color: #3B6D11; }
+    .fill-input.wrong   { border-color: #E24B4A; color: #A32D2D; }
 
-  .hint { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 12px; }
+    /* 3D flip cards (not used in this file but kept for safety) */
+    .flip-card { perspective: 1000px; }
+    .flip-inner { transform-style: preserve-3d; transition: transform 0.5s; }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { backface-visibility: hidden; }
+    .flip-back { transform: rotateY(180deg); }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
 
-  .sup-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .sup-table th { text-align: left; padding: 8px 12px; background: var(--color-background-secondary); color: var(--color-text-secondary); font-weight: 500; font-size: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .sup-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
-  .sup-table tr:last-child td { border-bottom: none; }
-  .tag-short { background: #E1F5EE; color: #0F6E56; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 500; }
-  .tag-long { background: #E6F1FB; color: #185FA5; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 500; }
-  .highlight-sup { font-weight: 500; color: #1D9E75; }
-
-  .rule-box { background: var(--color-background-secondary); border-left: 3px solid #1D9E75; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 1rem; margin-bottom: 1rem; }
-  .rule-box h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
-  .rule-box p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
-  .rule-box code { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 1px 6px; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); }
-
-  .quiz-question { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .quiz-q-text { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; }
-  .options { display: flex; flex-direction: column; gap: 8px; }
-  .option-btn { background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 14px; text-align: left; cursor: pointer; font-size: 14px; color: var(--color-text-primary); transition: all 0.15s; }
-  .option-btn:hover:not(:disabled) { border-color: #1D9E75; background: #E1F5EE; color: #0F6E56; }
-  .option-btn.correct { background: #EAF3DE; border-color: #639922; color: #3B6D11; font-weight: 500; }
-  .option-btn.wrong { background: #FCEBEB; border-color: #E24B4A; color: #A32D2D; }
-  .feedback { margin-top: 10px; font-size: 13px; padding: 8px 12px; border-radius: var(--border-radius-md); display: none; }
-  .feedback.show { display: block; }
-  .feedback.ok { background: #EAF3DE; color: #3B6D11; }
-  .feedback.fail { background: #FCEBEB; color: #A32D2D; }
-
-  .score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
-  .score-pill { background: var(--color-background-secondary); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--color-text-secondary); }
-  .score-pill span { font-weight: 500; color: #1D9E75; }
-
-  .progress { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; background: #1D9E75; border-radius: 3px; transition: width 0.3s; }
-
-  .next-btn { background: #1D9E75; color: white; border: none; border-radius: var(--border-radius-md); padding: 10px 20px; font-size: 14px; cursor: pointer; margin-top: 10px; display: none; }
-  .next-btn.show { display: inline-block; }
-
-  .disaster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-  .disaster-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; border: 0.5px solid var(--color-border-tertiary); }
-  .disaster-card .d-emoji { font-size: 28px; margin-bottom: 6px; }
-  .disaster-card .d-word { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
-  .disaster-card .d-def { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.4; }
-
-  .fill-blank { display: inline-block; border-bottom: 2px solid #1D9E75; min-width: 80px; margin: 0 4px; }
-  .fill-input { border: none; border-bottom: 2px solid #1D9E75; background: transparent; font-size: 14px; color: var(--color-text-primary); outline: none; min-width: 100px; padding: 2px 4px; }
-  .fill-input.correct { border-color: #639922; color: #3B6D11; }
-  .fill-input.wrong { border-color: #E24B4A; color: #A32D2D; }
-  .check-btn { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--color-text-primary); margin-top: 10px; }
-  .check-btn:hover { background: #1D9E75; color: white; border-color: #1D9E75; }
-  .sentence-row { padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 14px; color: var(--color-text-primary); line-height: 2; }
-  .sentence-row:last-child { border-bottom: none; }
-
-  .congrats { text-align: center; padding: 2rem; }
-  .congrats .big-emoji { font-size: 48px; margin-bottom: 12px; }
-  .congrats h2 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
-  .congrats p { font-size: 14px; color: var(--color-text-secondary); }
-  .restart-btn { background: #1D9E75; color: white; border: none; border-radius: var(--border-radius-md); padding: 10px 24px; font-size: 14px; cursor: pointer; margin-top: 16px; }
-</style>
-
-<div class="guide-wrap">
+<div class="px-4 py-6 max-w-[680px] mx-auto">
   <h2 class="sr-only">Interactive English study guide — Unit 2: Why do landscapes change? — 6th grade</h2>
 
-  <div class="hero">
-    <div class="badge">6° Básico · Inglés</div>
-    <h1>🌍 Why do landscapes change?</h1>
-    <p>Guía interactiva de estudio · Unit 2 · Prueba: 26 de mayo</p>
+  <!-- Hero -->
+  <div class="rounded-xl p-6 mb-6 text-[#E1F5EE]" style="background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%);">
+    <div class="inline-block bg-white/20 rounded-full px-3 py-0.5 text-xs text-[#E1F5EE] mb-2">6° Básico · Inglés</div>
+    <h1 class="text-[22px] font-medium text-[#E1F5EE] mb-1">🌍 Why do landscapes change?</h1>
+    <p class="text-sm text-[#9FE1CB]">Guía interactiva de estudio · Unit 2 · Prueba: 26 de mayo</p>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('vocab')">🏔 Vocabulary</button>
-    <button class="tab" onclick="showTab('grammar')">📐 Superlatives</button>
-    <button class="tab" onclick="showTab('disasters')">🌪 Disasters</button>
-    <button class="tab" onclick="showTab('quiz')">🎯 Quiz</button>
-    <button class="tab" onclick="showTab('fill')">✏️ Fill in</button>
+  <!-- Tabs -->
+  <div class="flex flex-wrap gap-1.5 mb-6">
+    <button class="tab px-4 py-2 rounded-full border border-[0.5px] border-gray-200 bg-white text-[13px] cursor-pointer text-gray-500 transition-all duration-150 active" onclick="showTab('vocab', event)">🏔 Vocabulary</button>
+    <button class="tab px-4 py-2 rounded-full border border-[0.5px] border-gray-200 bg-white text-[13px] cursor-pointer text-gray-500 transition-all duration-150" onclick="showTab('grammar', event)">📐 Superlatives</button>
+    <button class="tab px-4 py-2 rounded-full border border-[0.5px] border-gray-200 bg-white text-[13px] cursor-pointer text-gray-500 transition-all duration-150" onclick="showTab('disasters', event)">🌪 Disasters</button>
+    <button class="tab px-4 py-2 rounded-full border border-[0.5px] border-gray-200 bg-white text-[13px] cursor-pointer text-gray-500 transition-all duration-150" onclick="showTab('quiz', event)">🎯 Quiz</button>
+    <button class="tab px-4 py-2 rounded-full border border-[0.5px] border-gray-200 bg-white text-[13px] cursor-pointer text-gray-500 transition-all duration-150" onclick="showTab('fill', event)">✏️ Fill in</button>
   </div>
 
   <!-- VOCAB SECTION -->
   <div class="section active" id="sec-vocab">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-mountain" aria-hidden="true"></i> Landscape vocabulary</div>
-      <p class="hint">Tap each word to reveal its meaning in Spanish!</p>
-      <div class="vocab-grid" id="vocab-grid"></div>
+    <div class="bg-white border border-[0.5px] border-gray-100 rounded-xl p-5 mb-4">
+      <div class="text-[15px] font-medium text-gray-900 mb-4 flex items-center gap-2">
+        <i class="ti ti-mountain text-[#1D9E75] text-lg" aria-hidden="true"></i> Landscape vocabulary
+      </div>
+      <p class="text-xs text-gray-400 mb-3">Tap each word to reveal its meaning in Spanish!</p>
+      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));" id="vocab-grid"></div>
     </div>
   </div>
 
   <!-- GRAMMAR SECTION -->
   <div class="section" id="sec-grammar">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-book" aria-hidden="true"></i> How to form superlatives</div>
-      <div class="rule-box">
-        <h3>Short adjectives → add <code>-est</code></h3>
-        <p>big → the big<strong>gest</strong> · dry → the dri<strong>est</strong> · long → the lon<strong>gest</strong> · high → the high<strong>est</strong><br>
+    <div class="bg-white border border-[0.5px] border-gray-100 rounded-xl p-5 mb-4">
+      <div class="text-[15px] font-medium text-gray-900 mb-4 flex items-center gap-2">
+        <i class="ti ti-book text-[#1D9E75] text-lg" aria-hidden="true"></i> How to form superlatives
+      </div>
+
+      <div class="bg-gray-50 border-l-[3px] border-[#1D9E75] rounded-r-lg p-4 mb-4">
+        <h3 class="text-[14px] font-medium text-gray-900 mb-1.5">Short adjectives → add <code class="bg-white border border-[0.5px] border-gray-100 rounded px-1.5 py-0 text-[12px] font-mono text-gray-900">-est</code></h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">big → the big<strong>gest</strong> · dry → the dri<strong>est</strong> · long → the lon<strong>gest</strong> · high → the high<strong>est</strong><br>
         Remember: double the consonant when needed! (big → bigg<em>est</em>)</p>
       </div>
-      <div class="rule-box">
-        <h3>Long adjectives → use <code>the most</code></h3>
-        <p>glacial → the <strong>most</strong> glacial · arid → the <strong>most</strong> arid · extreme → the <strong>most</strong> extreme</p>
+
+      <div class="bg-gray-50 border-l-[3px] border-[#1D9E75] rounded-r-lg p-4 mb-4">
+        <h3 class="text-[14px] font-medium text-gray-900 mb-1.5">Long adjectives → use <code class="bg-white border border-[0.5px] border-gray-100 rounded px-1.5 py-0 text-[12px] font-mono text-gray-900">the most</code></h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">glacial → the <strong>most</strong> glacial · arid → the <strong>most</strong> arid · extreme → the <strong>most</strong> extreme</p>
       </div>
-      <div class="rule-box">
-        <h3>Irregular adjectives</h3>
-        <p>good → the <strong>best</strong> · bad → the <strong>worst</strong></p>
+
+      <div class="bg-gray-50 border-l-[3px] border-[#1D9E75] rounded-r-lg p-4 mb-4">
+        <h3 class="text-[14px] font-medium text-gray-900 mb-1.5">Irregular adjectives</h3>
+        <p class="text-[13px] text-gray-500 leading-relaxed">good → the <strong>best</strong> · bad → the <strong>worst</strong></p>
       </div>
-      <table class="sup-table">
-        <thead><tr><th>Adjective</th><th>Type</th><th>Superlative</th><th>Example</th></tr></thead>
+
+      <table class="w-full border-collapse text-[14px]">
+        <thead>
+          <tr>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-[12px] border-b border-[0.5px] border-gray-100">Adjective</th>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-[12px] border-b border-[0.5px] border-gray-100">Type</th>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-[12px] border-b border-[0.5px] border-gray-100">Superlative</th>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-[12px] border-b border-[0.5px] border-gray-100">Example</th>
+          </tr>
+        </thead>
         <tbody id="sup-tbody"></tbody>
       </table>
     </div>
@@ -140,34 +118,40 @@
 
   <!-- DISASTERS SECTION -->
   <div class="section" id="sec-disasters">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Natural disasters & weather</div>
-      <div class="disaster-grid" id="disaster-grid"></div>
+    <div class="bg-white border border-[0.5px] border-gray-100 rounded-xl p-5 mb-4">
+      <div class="text-[15px] font-medium text-gray-900 mb-4 flex items-center gap-2">
+        <i class="ti ti-alert-triangle text-[#1D9E75] text-lg" aria-hidden="true"></i> Natural disasters &amp; weather
+      </div>
+      <div class="grid gap-2.5" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));" id="disaster-grid"></div>
     </div>
   </div>
 
   <!-- QUIZ SECTION -->
   <div class="section" id="sec-quiz">
-    <div class="score-bar">
-      <div class="score-pill">Score: <span id="score-txt">0</span> / <span id="total-txt">10</span></div>
-      <div class="progress"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-gray-50 rounded-full px-4 py-1.5 text-[13px] text-gray-500">Score: <span class="font-medium text-[#1D9E75]" id="score-txt">0</span> / <span class="font-medium text-[#1D9E75]" id="total-txt">10</span></div>
+      <div class="flex-1 h-1.5 bg-gray-50 rounded-full overflow-hidden">
+        <div class="h-full bg-[#1D9E75] rounded-full transition-all duration-300" id="progress-fill" style="width:0%"></div>
+      </div>
     </div>
     <div id="quiz-container"></div>
-    <div class="congrats" id="quiz-congrats" style="display:none;">
-      <div class="big-emoji" id="congrats-emoji">🌟</div>
-      <h2 id="congrats-title">Great job!</h2>
-      <p id="congrats-msg">You finished the quiz.</p>
-      <button class="restart-btn" onclick="restartQuiz()">Try again!</button>
+    <div class="text-center py-8" id="quiz-congrats" style="display:none;">
+      <div class="text-5xl mb-3" id="congrats-emoji">🌟</div>
+      <h2 class="text-xl font-medium text-gray-900 mb-2" id="congrats-title">Great job!</h2>
+      <p class="text-sm text-gray-500" id="congrats-msg">You finished the quiz.</p>
+      <button class="mt-4 bg-[#1D9E75] text-white border-none rounded-lg px-6 py-2.5 text-[14px] cursor-pointer" onclick="restartQuiz()">Try again!</button>
     </div>
   </div>
 
   <!-- FILL IN SECTION -->
   <div class="section" id="sec-fill">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-pencil" aria-hidden="true"></i> Complete the sentences</div>
-      <p class="hint">Write the correct superlative form. Click "Check" when ready.</p>
+    <div class="bg-white border border-[0.5px] border-gray-100 rounded-xl p-5 mb-4">
+      <div class="text-[15px] font-medium text-gray-900 mb-4 flex items-center gap-2">
+        <i class="ti ti-pencil text-[#1D9E75] text-lg" aria-hidden="true"></i> Complete the sentences
+      </div>
+      <p class="text-xs text-gray-400 mb-3">Write the correct superlative form. Click "Check" when ready.</p>
       <div id="fill-rows"></div>
-      <button class="check-btn" onclick="checkFill()">Check answers</button>
+      <button class="check-btn mt-2.5 bg-gray-50 border border-[0.5px] border-gray-200 rounded-lg px-4 py-2 text-[13px] cursor-pointer text-gray-900 hover:bg-[#1D9E75] hover:text-white hover:border-[#1D9E75] transition-all" onclick="checkFill()">Check answers</button>
     </div>
   </div>
 </div>
@@ -239,8 +223,8 @@ function buildVocab() {
   const g = document.getElementById('vocab-grid');
   vocabData.forEach((v,i) => {
     const d = document.createElement('div');
-    d.className = 'vocab-item';
-    d.innerHTML = `<div class="emoji">${v.emoji}</div><div class="word">${v.word}</div><div class="translation">${v.es}</div>`;
+    d.className = 'vocab-item bg-gray-50 rounded-lg p-2.5 cursor-pointer border border-[0.5px] border-gray-100 transition-all duration-150 hover:border-[#1D9E75]';
+    d.innerHTML = `<div class="emoji text-xl mb-1">${v.emoji}</div><div class="word text-[14px] font-medium text-gray-900">${v.word}</div><div class="translation text-[12px] text-gray-500 mt-0.5">${v.es}</div>`;
     d.onclick = () => d.classList.toggle('revealed');
     g.appendChild(d);
   });
@@ -249,15 +233,24 @@ function buildVocab() {
 function buildSuperlatives() {
   const tb = document.getElementById('sup-tbody');
   supData.forEach(s => {
-    const tag = s.type === 'short' ? `<span class="tag-short">short</span>` : s.type === 'long' ? `<span class="tag-long">long</span>` : `<span class="tag-short" style="background:#FAEEDA;color:#854F0B;">irregular</span>`;
-    tb.innerHTML += `<tr><td>${s.adj}</td><td>${tag}</td><td class="highlight-sup">${s.sup}</td><td style="font-size:13px;color:var(--color-text-secondary)">${s.ex}</td></tr>`;
+    const tag = s.type === 'short'
+      ? `<span class="bg-[#E1F5EE] text-[#0F6E56] rounded-full px-2 py-0.5 text-[11px] font-medium">short</span>`
+      : s.type === 'long'
+      ? `<span class="bg-[#E6F1FB] text-[#185FA5] rounded-full px-2 py-0.5 text-[11px] font-medium">long</span>`
+      : `<span class="bg-[#FAEEDA] text-[#854F0B] rounded-full px-2 py-0.5 text-[11px] font-medium">irregular</span>`;
+    tb.innerHTML += `<tr><td class="px-3 py-2.5 border-b border-[0.5px] border-gray-100 text-gray-900">${s.adj}</td><td class="px-3 py-2.5 border-b border-[0.5px] border-gray-100">${tag}</td><td class="px-3 py-2.5 border-b border-[0.5px] border-gray-100 font-medium text-[#1D9E75]">${s.sup}</td><td class="px-3 py-2.5 border-b border-[0.5px] border-gray-100 text-[13px] text-gray-500">${s.ex}</td></tr>`;
   });
+  // Remove border from last row
+  const rows = tb.querySelectorAll('tr');
+  if (rows.length) {
+    rows[rows.length-1].querySelectorAll('td').forEach(td => td.style.borderBottom = 'none');
+  }
 }
 
 function buildDisasters() {
   const g = document.getElementById('disaster-grid');
   disasterData.forEach(d => {
-    g.innerHTML += `<div class="disaster-card"><div class="d-emoji">${d.emoji}</div><div class="d-word">${d.word}</div><div class="d-def">${d.def}</div></div>`;
+    g.innerHTML += `<div class="bg-gray-50 rounded-lg p-3 border border-[0.5px] border-gray-100"><div class="text-3xl mb-1.5">${d.emoji}</div><div class="text-[14px] font-medium text-gray-900">${d.word}</div><div class="text-[12px] text-gray-500 mt-0.5 leading-snug">${d.def}</div></div>`;
   });
 }
 
@@ -274,12 +267,12 @@ function renderQuestion() {
   document.getElementById('score-txt').textContent = score;
   document.getElementById('progress-fill').style.width = (qIndex/quizData.length*100)+'%';
   container.innerHTML = `
-    <div class="quiz-question">
-      <div class="quiz-q-text">${qIndex+1}. ${q.q}</div>
-      <div class="options">${q.opts.map((o,i)=>`<button class="option-btn" onclick="selectOption(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
-      <div class="feedback" id="qfeedback"></div>
+    <div class="bg-gray-50 rounded-xl p-5 mb-4">
+      <div class="text-[15px] font-medium text-gray-900 mb-4">${qIndex+1}. ${q.q}</div>
+      <div class="options flex flex-col gap-2">${q.opts.map((o,i)=>`<button class="option-btn bg-white border border-[0.5px] border-gray-200 rounded-lg px-3.5 py-2.5 text-left cursor-pointer text-[14px] text-gray-900 transition-all duration-150 hover:border-[#1D9E75] hover:bg-[#E1F5EE] hover:text-[#0F6E56]" onclick="selectOption(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+      <div class="feedback mt-2.5 text-[13px] p-2 px-3 rounded-lg" id="qfeedback"></div>
     </div>
-    <button class="next-btn" id="next-btn" onclick="nextQ()">Next question →</button>`;
+    <button class="next-btn bg-[#1D9E75] text-white border-none rounded-lg px-5 py-2.5 text-[14px] cursor-pointer mt-2.5" id="next-btn" onclick="nextQ()">Next question →</button>`;
 }
 
 function selectOption(btn, idx, correct) {
@@ -289,13 +282,13 @@ function selectOption(btn, idx, correct) {
   if (idx === correct) {
     btn.classList.add('correct');
     fb.textContent = '✅ Correct! Well done!';
-    fb.className = 'feedback show ok';
+    fb.className = 'feedback show ok mt-2.5 text-[13px] p-2 px-3 rounded-lg';
     score++;
   } else {
     btn.classList.add('wrong');
     btns[correct].classList.add('correct');
     fb.textContent = '❌ Not quite — the correct answer is highlighted above.';
-    fb.className = 'feedback show fail';
+    fb.className = 'feedback show fail mt-2.5 text-[13px] p-2 px-3 rounded-lg';
   }
   document.getElementById('score-txt').textContent = score;
   document.getElementById('next-btn').classList.add('show');
@@ -329,7 +322,7 @@ function restartQuiz() {
 function buildFill() {
   const container = document.getElementById('fill-rows');
   fillData.forEach((f,i) => {
-    container.innerHTML += `<div class="sentence-row">${f.before} <input class="fill-input" id="fi-${i}" placeholder="${f.adj}..." data-ans="${f.blank}"> ${f.after}</div>`;
+    container.innerHTML += `<div class="sentence-row py-2.5 border-b border-[0.5px] border-gray-100 text-[14px] text-gray-900 leading-loose last:border-b-0">${f.before} <input class="fill-input border-0 border-b-2 border-[#1D9E75] bg-transparent text-[14px] text-gray-900 outline-none min-w-[100px] px-1 py-0.5 transition-colors" id="fi-${i}" placeholder="${f.adj}..." data-ans="${f.blank}"> ${f.after}</div>`;
   });
 }
 
@@ -348,12 +341,36 @@ function checkFill() {
   });
 }
 
-function showTab(name) {
+function showTab(name, event) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.remove('active');
+    t.style.background = '';
+    t.style.color = '';
+    t.style.borderColor = '';
+    t.style.fontWeight = '';
+  });
   document.getElementById('sec-'+name).classList.add('active');
-  event.target.classList.add('active');
+  const btn = event ? event.target : null;
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.background = '#1D9E75';
+    btn.style.color = 'white';
+    btn.style.borderColor = '#1D9E75';
+    btn.style.fontWeight = '500';
+  }
 }
+
+// Set initial active tab style
+document.addEventListener('DOMContentLoaded', () => {
+  const firstTab = document.querySelector('.tab.active');
+  if (firstTab) {
+    firstTab.style.background = '#1D9E75';
+    firstTab.style.color = 'white';
+    firstTab.style.borderColor = '#1D9E75';
+    firstTab.style.fontWeight = '500';
+  }
+});
 
 buildVocab();
 buildSuperlatives();
@@ -361,3 +378,5 @@ buildDisasters();
 buildQuiz();
 buildFill();
 </script>
+</body>
+</html>

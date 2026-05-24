@@ -1,387 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitos, Leyendas y Pronombres · 3° Básico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Nunito', sans-serif; }
+
+    /* Section visibility (JS uses classList .on) */
+    .sec { display: none; }
+    .sec.on { display: block; }
+
+    /* Story panels (JS uses classList .on) */
+    .story-panel { display: none; }
+    .story-panel.on { display: block; }
+
+    /* Tab active states */
+    .tab.on { background: #534AB7; color: #fff; border-color: #534AB7; }
+    .story-tab.on { background: #0F6E56; color: #fff; border-color: #0F6E56; }
+
+    /* Quiz feedback */
+    .qfb { display: none; }
+    .qfb.show { display: block; }
+    .next-q { display: none; }
+    .next-q.show { display: inline-block; }
+
+    /* Flip cards — 3D transforms, no Tailwind equivalent */
+    .flip-wrap { perspective: 700px; cursor: pointer; }
+    .flip-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.45s; }
+    .flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .flip-back { transform: rotateY(180deg); }
+
+    /* Quiz option hover (needs :not(:disabled) which is hard in Tailwind) */
+    .opt:hover:not(:disabled) { border-color: #534AB7; background: #EEEDFE; color: #3C3489; }
+    .opt.ok { background: #EAF3DE; border-color: #639922; color: #3B6D11; font-weight: 500; }
+    .opt.bad { background: #FCEBEB; border-color: #E24B4A; color: #A32D2D; }
+  </style>
+</head>
+<body class="bg-white">
 
 <h2 class="sr-only">Guía interactiva de Lenguaje 3° básico: Mitos y Leyendas y Pronombres Personales</h2>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
 
-.wrap{padding:1.5rem 1rem;max-width:700px;margin:0 auto}
+<div class="px-4 py-6 max-w-2xl mx-auto">
 
-.hero{border-radius:var(--border-radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.5rem;background:linear-gradient(135deg,#534AB7,#3C3489);position:relative;overflow:hidden}
-.hero::after{content:"🌟";position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-size:56px;opacity:0.25}
-.hero .badge{display:inline-block;background:rgba(255,255,255,0.18);border-radius:20px;padding:3px 12px;font-size:12px;color:#CECBF6;margin-bottom:8px;font-weight:500}
-.hero h1{font-size:22px;font-weight:500;color:#fff;margin-bottom:4px}
-.hero p{font-size:13px;color:#AFA9EC}
+  <!-- HERO -->
+  <div class="rounded-xl px-7 py-6 mb-6 relative overflow-hidden" style="background: linear-gradient(135deg,#534AB7,#3C3489)">
+    <div class="absolute right-6 top-1/2 -translate-y-1/2 text-6xl opacity-25 pointer-events-none select-none">🌟</div>
+    <div class="inline-block bg-white/20 rounded-full px-3 py-0.5 text-xs font-medium mb-2" style="color:#CECBF6">3° Básico · Lenguaje</div>
+    <h1 class="text-xl font-medium text-white mb-1">Mitos, Leyendas y Pronombres</h1>
+    <p class="text-sm" style="color:#AFA9EC">Guía interactiva de repaso para la prueba</p>
+  </div>
 
-.tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
-.tab{padding:8px 18px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s;font-weight:500}
-.tab.on{background:#534AB7;color:#fff;border-color:#534AB7}
+  <!-- MAIN TABS -->
+  <div class="flex gap-2 mb-6 flex-wrap">
+    <button class="tab on px-4 py-2 rounded-full border border-gray-200 bg-white text-sm cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showTab('mitos')">🌋 Mitos y Leyendas</button>
+    <button class="tab px-4 py-2 rounded-full border border-gray-200 bg-white text-sm cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showTab('historias')">📖 Las historias</button>
+    <button class="tab px-4 py-2 rounded-full border border-gray-200 bg-white text-sm cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showTab('pronombres')">🙋 Pronombres</button>
+    <button class="tab px-4 py-2 rounded-full border border-gray-200 bg-white text-sm cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showTab('quiz')">🎯 Quiz final</button>
+  </div>
 
-.sec{display:none}.sec.on{display:block}
+  <!-- ═══════════ MITOS Y LEYENDAS ═══════════ -->
+  <div class="sec on" id="sec-mitos">
 
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
-.card h3{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+    <!-- Flip cards: qué son -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-sparkles" aria-hidden="true"></i> ¿Qué son? Toca cada carta para descubrir</h3>
+      <p class="text-xs text-gray-400 mb-3">Haz clic en cada tarjeta para darla vuelta</p>
+      <div class="grid gap-3 mb-4" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
 
-.pill{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500}
-.pill-p{background:#EEEDFE;color:#3C3489}
-.pill-t{background:#E1F5EE;color:#085041}
-.pill-a{background:#FAEEDA;color:#633806}
-
-.hint{font-size:12px;color:var(--color-text-tertiary);margin-bottom:.75rem}
-
-/* FLIP CARDS */
-.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:1rem}
-.flip-wrap{perspective:700px;height:130px;cursor:pointer}
-.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .45s}
-.flip-wrap.flipped .flip-inner{transform:rotateY(180deg)}
-.flip-front,.flip-back{position:absolute;inset:0;border-radius:var(--border-radius-lg);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;text-align:center;border:0.5px solid var(--color-border-tertiary)}
-.flip-front{background:var(--color-background-secondary)}
-.flip-back{transform:rotateY(180deg)}
-.flip-front .fi{font-size:28px;margin-bottom:6px}
-.flip-front .fw{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.flip-front .fh{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
-.flip-back .fb{font-size:12px;color:var(--color-text-primary);line-height:1.5}
-
-/* STORY CARDS */
-.story-tabs{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
-.story-tab{padding:6px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:12px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s;font-weight:500}
-.story-tab.on{background:#0F6E56;color:#fff;border-color:#0F6E56}
-.story-panel{display:none}.story-panel.on{display:block}
-
-.struct-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
-.struct-box{border-radius:var(--border-radius-md);padding:.75rem;text-align:center}
-.struct-box .sb-icon{font-size:22px;margin-bottom:4px}
-.struct-box .sb-title{font-size:13px;font-weight:500;margin-bottom:3px}
-.struct-box .sb-desc{font-size:11px;line-height:1.4;color:var(--color-text-secondary)}
-.s-ini{background:#EEEDFE;border:0.5px solid #AFA9EC}
-.s-ini .sb-title{color:#3C3489}
-.s-des{background:#E1F5EE;border:0.5px solid #5DCAA5}
-.s-des .sb-title{color:#085041}
-.s-fin{background:#FAEEDA;border:0.5px solid #FAC775}
-.s-fin .sb-title{color:#633806}
-
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem}
-.detail-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;border:0.5px solid var(--color-border-tertiary)}
-.detail-box .db-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-.detail-box .db-val{font-size:13px;color:var(--color-text-primary);line-height:1.5}
-
-.diff-box{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem;border-left:3px solid #1D9E75;border-top-left-radius:0;border-bottom-left-radius:0;margin-bottom:1rem}
-.diff-box h4{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
-.diff-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.diff-col h5{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.diff-col ul{padding-left:14px}
-.diff-col ul li{font-size:12px;color:var(--color-text-primary);line-height:1.6}
-
-/* PRONOMBRES */
-.pron-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:1rem}
-.pron-table th{text-align:left;padding:8px 12px;background:var(--color-background-secondary);color:var(--color-text-secondary);font-weight:500;font-size:12px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.pron-table td{padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
-.pron-table tr:last-child td{border-bottom:none}
-.pron-table td:first-child{font-weight:500;color:#534AB7}
-.pron-highlight{background:#EEEDFE;border-radius:4px;padding:1px 6px;color:#3C3489;font-weight:500;font-size:13px}
-
-.sentence{font-size:14px;color:var(--color-text-primary);line-height:1.8;margin-bottom:.5rem;padding:.5rem .75rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)}
-
-/* QUIZ */
-.qbox{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
-.qtext{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
-.opts{display:flex;flex-direction:column;gap:7px}
-.opt{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 14px;text-align:left;cursor:pointer;font-size:13px;color:var(--color-text-primary);transition:all .15s}
-.opt:hover:not(:disabled){border-color:#534AB7;background:#EEEDFE;color:#3C3489}
-.opt.ok{background:#EAF3DE;border-color:#639922;color:#3B6D11;font-weight:500}
-.opt.bad{background:#FCEBEB;border-color:#E24B4A;color:#A32D2D}
-.qfb{margin-top:8px;font-size:13px;padding:7px 12px;border-radius:var(--border-radius-md);display:none}
-.qfb.show{display:block}
-.qfb.ok{background:#EAF3DE;color:#3B6D11}
-.qfb.bad{background:#FCEBEB;color:#A32D2D}
-.next-q{background:#534AB7;color:#fff;border:none;border-radius:var(--border-radius-md);padding:9px 20px;font-size:13px;cursor:pointer;margin-top:8px;display:none}
-.next-q.show{display:inline-block}
-.score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
-.score-pill{background:var(--color-background-secondary);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
-.score-pill span{font-weight:500;color:#534AB7}
-.prog{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
-.prog-fill{height:100%;background:#534AB7;border-radius:3px;transition:width .3s}
-.congrats{text-align:center;padding:2.5rem 1rem}
-.congrats .ce{font-size:52px;margin-bottom:12px}
-.congrats h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
-.congrats p{font-size:14px;color:var(--color-text-secondary);margin-bottom:16px}
-.restart{background:#534AB7;color:#fff;border:none;border-radius:var(--border-radius-md);padding:10px 24px;font-size:14px;cursor:pointer}
-</style>
-
-<div class="wrap">
-
-<div class="hero">
-  <div class="badge">3° Básico · Lenguaje</div>
-  <h1>Mitos, Leyendas y Pronombres</h1>
-  <p>Guía interactiva de repaso para la prueba</p>
-</div>
-
-<div class="tabs">
-  <button class="tab on" onclick="showTab('mitos')">🌋 Mitos y Leyendas</button>
-  <button class="tab" onclick="showTab('historias')">📖 Las historias</button>
-  <button class="tab" onclick="showTab('pronombres')">🙋 Pronombres</button>
-  <button class="tab" onclick="showTab('quiz')">🎯 Quiz final</button>
-</div>
-
-<!-- ═══════════ MITOS Y LEYENDAS ═══════════ -->
-<div class="sec on" id="sec-mitos">
-
-  <div class="card">
-    <h3><i class="ti ti-sparkles" aria-hidden="true"></i> ¿Qué son? Toca cada carta para descubrir</h3>
-    <p class="hint">Haz clic en cada tarjeta para darla vuelta</p>
-    <div class="flip-grid">
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">🌋</div><div class="fw">Mito</div><div class="fh">¿Qué es?</div></div>
-          <div class="flip-back" style="background:#EEEDFE;border-color:#AFA9EC"><div class="fb"><strong style="color:#3C3489">Historia muy antigua</strong> que explica el origen del mundo, la naturaleza o fenómenos naturales. Sus personajes son <strong style="color:#3C3489">dioses o seres mágicos.</strong></div></div>
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">🌋</div>
+              <div class="text-sm font-medium text-gray-900">Mito</div>
+              <div class="text-xs text-gray-400 mt-0.5">¿Qué es?</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#EEEDFE;border-color:#AFA9EC;color:#26215C">
+              <strong style="color:#3C3489">Historia muy antigua</strong> que explica el origen del mundo, la naturaleza o fenómenos naturales. Sus personajes son <strong style="color:#3C3489">dioses o seres mágicos.</strong>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">🌊</div><div class="fw">Leyenda</div><div class="fh">¿Qué es?</div></div>
-          <div class="flip-back" style="background:#E1F5EE;border-color:#5DCAA5"><div class="fb"><strong style="color:#085041">Historia de un lugar real</strong> que mezcla hechos verdaderos con elementos mágicos. Pasa en <strong style="color:#085041">lugares y tiempos reales.</strong></div></div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">🌊</div>
+              <div class="text-sm font-medium text-gray-900">Leyenda</div>
+              <div class="text-xs text-gray-400 mt-0.5">¿Qué es?</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#E1F5EE;border-color:#5DCAA5;color:#04342C">
+              <strong style="color:#085041">Historia de un lugar real</strong> que mezcla hechos verdaderos con elementos mágicos. Pasa en <strong style="color:#085041">lugares y tiempos reales.</strong>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">🎭</div><div class="fw">¿Qué representan?</div><div class="fh">Su propósito</div></div>
-          <div class="flip-back" style="background:#FAEEDA;border-color:#FAC775"><div class="fb">Explican fenómenos naturales, transmiten <strong style="color:#633806">valores culturales</strong> y enseñan cómo vivir en comunidad. Son parte de la identidad de un pueblo.</div></div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">🎭</div>
+              <div class="text-sm font-medium text-gray-900">¿Qué representan?</div>
+              <div class="text-xs text-gray-400 mt-0.5">Su propósito</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#FAEEDA;border-color:#FAC775;color:#412402">
+              Explican fenómenos naturales, transmiten <strong style="color:#633806">valores culturales</strong> y enseñan cómo vivir en comunidad. Son parte de la identidad de un pueblo.
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">🏔</div><div class="fw">Ambiente</div><div class="fh">¿Dónde ocurre?</div></div>
-          <div class="flip-back" style="background:#E6F1FB;border-color:#85B7EB"><div class="fb">El <strong style="color:#0C447C">lugar y el tiempo</strong> donde se desarrolla la historia. Puede ser un bosque, lago, volcán, el Olimpo… ¡Siempre es importante para entender el relato!</div></div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">🏔</div>
+              <div class="text-sm font-medium text-gray-900">Ambiente</div>
+              <div class="text-xs text-gray-400 mt-0.5">¿Dónde ocurre?</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#E6F1FB;border-color:#85B7EB;color:#042C53">
+              El <strong style="color:#0C447C">lugar y el tiempo</strong> donde se desarrolla la historia. Puede ser un bosque, lago, volcán, el Olimpo… ¡Siempre es importante para entender el relato!
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">👥</div><div class="fw">Personajes</div><div class="fh">¿Quiénes son?</div></div>
-          <div class="flip-back" style="background:#FBEAF0;border-color:#ED93B1"><div class="fb">Pueden ser <strong style="color:#72243E">dioses, animales mágicos, héroes o personas</strong> con poderes. Tienen características especiales que los diferencian.</div></div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">👥</div>
+              <div class="text-sm font-medium text-gray-900">Personajes</div>
+              <div class="text-xs text-gray-400 mt-0.5">¿Quiénes son?</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#FBEAF0;border-color:#ED93B1;color:#4B1528">
+              Pueden ser <strong style="color:#72243E">dioses, animales mágicos, héroes o personas</strong> con poderes. Tienen características especiales que los diferencian.
+            </div>
+          </div>
         </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front bg-gray-50 rounded-xl border border-gray-100 p-2.5 text-center">
+              <div class="text-3xl mb-1.5">📋</div>
+              <div class="text-sm font-medium text-gray-900">Estructura</div>
+              <div class="text-xs text-gray-400 mt-0.5">¿Cómo se organiza?</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#EAF3DE;border-color:#C0DD97;color:#173404">
+              Toda historia tiene <strong style="color:#27500A">inicio</strong> (presentación), <strong style="color:#27500A">desarrollo</strong> (el problema o acción) y <strong style="color:#27500A">desenlace</strong> (el final o solución).
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="fi">📋</div><div class="fw">Estructura</div><div class="fh">¿Cómo se organiza?</div></div>
-          <div class="flip-back" style="background:#EAF3DE;border-color:#C0DD97"><div class="fb">Toda historia tiene <strong style="color:#27500A">inicio</strong> (presentación), <strong style="color:#27500A">desarrollo</strong> (el problema o acción) y <strong style="color:#27500A">desenlace</strong> (el final o solución).</div></div>
+    </div>
+
+    <!-- Diferencias -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-git-compare" aria-hidden="true"></i> ¿En qué se diferencian?</h3>
+      <div class="bg-gray-50 rounded-r-xl border-l-[3px] border-l-[#1D9E75] pl-4 pr-3 py-4 mb-4">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <h5 class="text-xs font-medium text-gray-500 mb-1 pb-1 border-b border-gray-100">🌋 Mito</h5>
+            <ul class="pl-3.5 list-disc">
+              <li class="text-xs text-gray-900 leading-relaxed">Personajes: dioses y héroes</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Explica el origen de algo</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Tiempo: muy antiguo, sin fecha</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Lugar: sagrado o fantástico</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Ejemplo: El dios Zeus</li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-medium text-gray-500 mb-1 pb-1 border-b border-gray-100">🌊 Leyenda</h5>
+            <ul class="pl-3.5 list-disc">
+              <li class="text-xs text-gray-900 leading-relaxed">Personajes: personas o animales</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Explica algo de un lugar real</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Tiempo: pasado histórico</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Lugar: real y reconocible</li>
+              <li class="text-xs text-gray-900 leading-relaxed">Ejemplo: La Laguna del Inca</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Secuencia narrativa -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-list-numbers" aria-hidden="true"></i> Secuencia narrativa</h3>
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        <div class="rounded-lg p-3 text-center border" style="background:#EEEDFE;border-color:#AFA9EC">
+          <div class="text-2xl mb-1">🌅</div>
+          <div class="text-sm font-medium mb-0.5" style="color:#3C3489">Inicio</div>
+          <div class="text-[11px] leading-snug text-gray-500">Se presentan los personajes y el lugar donde ocurre la historia.</div>
+        </div>
+        <div class="rounded-lg p-3 text-center border" style="background:#E1F5EE;border-color:#5DCAA5">
+          <div class="text-2xl mb-1">⚡</div>
+          <div class="text-sm font-medium mb-0.5" style="color:#085041">Desarrollo</div>
+          <div class="text-[11px] leading-snug text-gray-500">Ocurre el problema o la acción principal. Es la parte más larga.</div>
+        </div>
+        <div class="rounded-lg p-3 text-center border" style="background:#FAEEDA;border-color:#FAC775">
+          <div class="text-2xl mb-1">🌄</div>
+          <div class="text-sm font-medium mb-0.5" style="color:#633806">Desenlace</div>
+          <div class="text-[11px] leading-snug text-gray-500">Se resuelve el problema. La historia llega a su fin.</div>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 leading-relaxed">En <strong class="font-medium">El perro de fuego</strong>: el <em>inicio</em> presenta al Sol y la Luna; el <em>desarrollo</em> muestra el robo de la luz; el <em>desenlace</em> explica cómo el perro restituye el fuego al mundo.</p>
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3><i class="ti ti-git-compare" aria-hidden="true"></i> ¿En qué se diferencian?</h3>
-    <div class="diff-box">
-      <div class="diff-row">
-        <div class="diff-col">
-          <h5>🌋 Mito</h5>
-          <ul>
-            <li>Personajes: dioses y héroes</li>
-            <li>Explica el origen de algo</li>
-            <li>Tiempo: muy antiguo, sin fecha</li>
-            <li>Lugar: sagrado o fantástico</li>
-            <li>Ejemplo: El dios Zeus</li>
-          </ul>
+  <!-- ═══════════ LAS HISTORIAS ═══════════ -->
+  <div class="sec" id="sec-historias">
+
+    <div class="flex gap-1.5 mb-4 flex-wrap">
+      <button class="story-tab on px-3.5 py-1.5 rounded-full border border-gray-200 bg-white text-xs cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showStory('kakach')">🐦 Kakach</button>
+      <button class="story-tab px-3.5 py-1.5 rounded-full border border-gray-200 bg-white text-xs cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showStory('laguna')">🏔 La Laguna del Inca</button>
+      <button class="story-tab px-3.5 py-1.5 rounded-full border border-gray-200 bg-white text-xs cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showStory('perro')">🔥 El Perro de Fuego</button>
+      <button class="story-tab px-3.5 py-1.5 rounded-full border border-gray-200 bg-white text-xs cursor-pointer text-gray-500 font-medium transition-all duration-150" onclick="showStory('zeus')">⚡ El dios Zeus</button>
+    </div>
+
+    <!-- KAKACH -->
+    <div class="story-panel on" id="sp-kakach">
+      <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+        <h3 class="text-base font-medium text-gray-900 mb-3">🐦 Kakach, la leyenda del pájaro carpintero</h3>
+        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mb-3" style="background:#E1F5EE;color:#085041">Leyenda mapuche</span>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div class="rounded-lg p-3 text-center border" style="background:#EEEDFE;border-color:#AFA9EC">
+            <div class="text-2xl mb-1">🌅</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#3C3489">Inicio</div>
+            <div class="text-[11px] leading-snug text-gray-500">Un hombre avaro guarda toda la comida y no comparte con nadie.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#E1F5EE;border-color:#5DCAA5">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#085041">Desarrollo</div>
+            <div class="text-[11px] leading-snug text-gray-500">Los espíritus lo castigan por su egoísmo y por no respetar las leyes del pueblo.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#FAEEDA;border-color:#FAC775">
+            <div class="text-2xl mb-1">🌄</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#633806">Desenlace</div>
+            <div class="text-[11px] leading-snug text-gray-500">El hombre se convierte en el pájaro carpintero, condenado a buscar comida en los árboles.</div>
+          </div>
         </div>
-        <div class="diff-col">
-          <h5>🌊 Leyenda</h5>
-          <ul>
-            <li>Personajes: personas o animales</li>
-            <li>Explica algo de un lugar real</li>
-            <li>Tiempo: pasado histórico</li>
-            <li>Lugar: real y reconocible</li>
-            <li>Ejemplo: La Laguna del Inca</li>
-          </ul>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Ambiente</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Bosque nativo del sur de Chile. Tiempo indígena mapuche.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Personajes</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El hombre avaro, los espíritus de la naturaleza.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">¿Qué explica?</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El origen del pájaro carpintero y la importancia de compartir.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Valor que transmite</div>
+            <div class="text-sm text-gray-900 leading-relaxed">La generosidad y la solidaridad con la comunidad.</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3><i class="ti ti-list-numbers" aria-hidden="true"></i> Secuencia narrativa</h3>
-    <div class="struct-row">
-      <div class="struct-box s-ini"><div class="sb-icon">🌅</div><div class="sb-title">Inicio</div><div class="sb-desc">Se presentan los personajes y el lugar donde ocurre la historia.</div></div>
-      <div class="struct-box s-des"><div class="sb-icon">⚡</div><div class="sb-title">Desarrollo</div><div class="sb-desc">Ocurre el problema o la acción principal. Es la parte más larga.</div></div>
-      <div class="struct-box s-fin"><div class="sb-icon">🌄</div><div class="sb-title">Desenlace</div><div class="sb-desc">Se resuelve el problema. La historia llega a su fin.</div></div>
-    </div>
-    <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.6">En <strong style="font-weight:500">El perro de fuego</strong>: el <em>inicio</em> presenta al Sol y la Luna; el <em>desarrollo</em> muestra el robo de la luz; el <em>desenlace</em> explica cómo el perro restituye el fuego al mundo.</p>
-  </div>
-
-</div>
-
-<!-- ═══════════ LAS HISTORIAS ═══════════ -->
-<div class="sec" id="sec-historias">
-
-  <div class="story-tabs">
-    <button class="story-tab on" onclick="showStory('kakach')">🐦 Kakach</button>
-    <button class="story-tab" onclick="showStory('laguna')">🏔 La Laguna del Inca</button>
-    <button class="story-tab" onclick="showStory('perro')">🔥 El Perro de Fuego</button>
-    <button class="story-tab" onclick="showStory('zeus')">⚡ El dios Zeus</button>
-  </div>
-
-  <!-- KAKACH -->
-  <div class="story-panel on" id="sp-kakach">
-    <div class="card">
-      <h3>🐦 Kakach, la leyenda del pájaro carpintero</h3>
-      <span class="pill pill-t" style="margin-bottom:.75rem;display:inline-block">Leyenda mapuche</span>
-      <div class="struct-row">
-        <div class="struct-box s-ini"><div class="sb-icon">🌅</div><div class="sb-title">Inicio</div><div class="sb-desc">Un hombre avaro guarda toda la comida y no comparte con nadie.</div></div>
-        <div class="struct-box s-des"><div class="sb-icon">⚡</div><div class="sb-title">Desarrollo</div><div class="sb-desc">Los espíritus lo castigan por su egoísmo y por no respetar las leyes del pueblo.</div></div>
-        <div class="struct-box s-fin"><div class="sb-icon">🌄</div><div class="sb-title">Desenlace</div><div class="sb-desc">El hombre se convierte en el pájaro carpintero, condenado a buscar comida en los árboles.</div></div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-box"><div class="db-label">Ambiente</div><div class="db-val">Bosque nativo del sur de Chile. Tiempo indígena mapuche.</div></div>
-        <div class="detail-box"><div class="db-label">Personajes</div><div class="db-val">El hombre avaro, los espíritus de la naturaleza.</div></div>
-        <div class="detail-box"><div class="db-label">¿Qué explica?</div><div class="db-val">El origen del pájaro carpintero y la importancia de compartir.</div></div>
-        <div class="detail-box"><div class="db-label">Valor que transmite</div><div class="db-val">La generosidad y la solidaridad con la comunidad.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LAGUNA -->
-  <div class="story-panel" id="sp-laguna">
-    <div class="card">
-      <h3>🏔 La Laguna del Inca</h3>
-      <span class="pill pill-t" style="margin-bottom:.75rem;display:inline-block">Leyenda andina</span>
-      <div class="struct-row">
-        <div class="struct-box s-ini"><div class="sb-icon">🌅</div><div class="sb-title">Inicio</div><div class="sb-desc">Un príncipe inca se casa con la hermosa Kora-Llé en los Andes.</div></div>
-        <div class="struct-box s-des"><div class="sb-icon">⚡</div><div class="sb-title">Desarrollo</div><div class="sb-desc">Durante el descenso, Kora-Llé muere. El príncipe, desconsolado, lanza su cuerpo al lago.</div></div>
-        <div class="struct-box s-fin"><div class="sb-icon">🌄</div><div class="sb-title">Desenlace</div><div class="sb-desc">Los dioses convierten el lago en un espejo verde esmeralda para preservar su belleza.</div></div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-box"><div class="db-label">Ambiente</div><div class="db-val">Los Andes, Portillo, Chile. Tiempo del Imperio Inca.</div></div>
-        <div class="detail-box"><div class="db-label">Personajes</div><div class="db-val">Príncipe inca, Kora-Llé (princesa), los dioses andinos.</div></div>
-        <div class="detail-box"><div class="db-label">¿Qué explica?</div><div class="db-val">Por qué la Laguna del Inca tiene ese color verde esmeralda único.</div></div>
-        <div class="detail-box"><div class="db-label">Lugar real</div><div class="db-val">La Laguna del Inca existe hoy en Portillo, Chile.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PERRO DE FUEGO -->
-  <div class="story-panel" id="sp-perro">
-    <div class="card">
-      <h3>🔥 El perro de fuego y el robo del sol y la luna</h3>
-      <span class="pill pill-p" style="margin-bottom:.75rem;display:inline-block">Mito mapuche</span>
-      <div class="struct-row">
-        <div class="struct-box s-ini"><div class="sb-icon">🌅</div><div class="sb-title">Inicio</div><div class="sb-desc">El Sol y la Luna iluminan el mundo. Un ser malvado roba la luz y hunde todo en oscuridad.</div></div>
-        <div class="struct-box s-des"><div class="sb-icon">⚡</div><div class="sb-title">Desarrollo</div><div class="sb-desc">El perro de fuego, guardián del mundo, lucha contra el ser malvado para recuperar la luz.</div></div>
-        <div class="struct-box s-fin"><div class="sb-icon">🌄</div><div class="sb-title">Desenlace</div><div class="sb-desc">El perro vence y devuelve el fuego al mundo. La luz regresa y el equilibrio se restaura.</div></div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-box"><div class="db-label">Ambiente</div><div class="db-val">El universo mapuche. Tiempo del origen del mundo.</div></div>
-        <div class="detail-box"><div class="db-label">Personajes</div><div class="db-val">El Sol, la Luna, el perro de fuego (héroe), el ser malvado.</div></div>
-        <div class="detail-box"><div class="db-label">¿Qué explica?</div><div class="db-val">Por qué hay luz en el mundo y la importancia del equilibrio entre el bien y el mal.</div></div>
-        <div class="detail-box"><div class="db-label">Tipo de texto</div><div class="db-val">Es un mito: explica el origen de un fenómeno natural (la luz del sol).</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ZEUS -->
-  <div class="story-panel" id="sp-zeus">
-    <div class="card">
-      <h3>⚡ El dios Zeus</h3>
-      <span class="pill pill-p" style="margin-bottom:.75rem;display:inline-block">Mito griego</span>
-      <div class="struct-row">
-        <div class="struct-box s-ini"><div class="sb-icon">🌅</div><div class="sb-title">Inicio</div><div class="sb-desc">Cronos, rey de los titanes, devora a sus hijos para que no lo destituyan del poder.</div></div>
-        <div class="struct-box s-des"><div class="sb-icon">⚡</div><div class="sb-title">Desarrollo</div><div class="sb-desc">Zeus se salva, crece en secreto y regresa para enfrentarse a Cronos y liberar a sus hermanos.</div></div>
-        <div class="struct-box s-fin"><div class="sb-icon">🌄</div><div class="sb-title">Desenlace</div><div class="sb-desc">Zeus vence a los titanes y se convierte en el dios supremo del Monte Olimpo.</div></div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-box"><div class="db-label">Ambiente</div><div class="db-val">El Monte Olimpo y el cosmos griego. Tiempo del origen de los dioses.</div></div>
-        <div class="detail-box"><div class="db-label">Personajes</div><div class="db-val">Zeus (héroe/dios), Cronos (antagonista), dioses olímpicos.</div></div>
-        <div class="detail-box"><div class="db-label">¿Qué explica?</div><div class="db-val">El origen del orden divino griego y quién gobierna el universo.</div></div>
-        <div class="detail-box"><div class="db-label">Tipo de texto</div><div class="db-val">Es un mito: los personajes son dioses y explica el origen del poder.</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ PRONOMBRES ═══════════ -->
-<div class="sec" id="sec-pronombres">
-
-  <div class="card">
-    <h3><i class="ti ti-users" aria-hidden="true"></i> ¿Qué son los pronombres personales?</h3>
-    <p style="font-size:14px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:1rem">Los pronombres personales son palabras que <strong style="font-weight:500">reemplazan al nombre de una persona</strong> en la oración. Los usamos para no repetir el nombre todo el tiempo. Son como un "apodo" que le ponemos a alguien dentro de una oración.</p>
-    <p class="hint">Toca cada tarjeta para ver un ejemplo</p>
-    <div class="flip-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#EEEDFE;border-color:#AFA9EC"><div class="fi">😊</div><div class="fw" style="color:#3C3489;font-size:18px">Yo</div><div class="fh">1ª singular</div></div>
-          <div class="flip-back" style="background:#EEEDFE;border-color:#AFA9EC"><div class="fb" style="color:#26215C"><strong>Yo</strong> soy el narrador. <br><br>Se usa cuando la persona que habla se refiere a sí misma.</div></div>
+    <!-- LAGUNA -->
+    <div class="story-panel" id="sp-laguna">
+      <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+        <h3 class="text-base font-medium text-gray-900 mb-3">🏔 La Laguna del Inca</h3>
+        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mb-3" style="background:#E1F5EE;color:#085041">Leyenda andina</span>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div class="rounded-lg p-3 text-center border" style="background:#EEEDFE;border-color:#AFA9EC">
+            <div class="text-2xl mb-1">🌅</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#3C3489">Inicio</div>
+            <div class="text-[11px] leading-snug text-gray-500">Un príncipe inca se casa con la hermosa Kora-Llé en los Andes.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#E1F5EE;border-color:#5DCAA5">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#085041">Desarrollo</div>
+            <div class="text-[11px] leading-snug text-gray-500">Durante el descenso, Kora-Llé muere. El príncipe, desconsolado, lanza su cuerpo al lago.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#FAEEDA;border-color:#FAC775">
+            <div class="text-2xl mb-1">🌄</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#633806">Desenlace</div>
+            <div class="text-[11px] leading-snug text-gray-500">Los dioses convierten el lago en un espejo verde esmeralda para preservar su belleza.</div>
+          </div>
         </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#E1F5EE;border-color:#5DCAA5"><div class="fi">👉</div><div class="fw" style="color:#0F6E56;font-size:18px">Tú</div><div class="fh">2ª singular</div></div>
-          <div class="flip-back" style="background:#E1F5EE;border-color:#5DCAA5"><div class="fb" style="color:#04342C"><strong>Tú</strong> eres muy valiente. <br><br>Se usa para hablarle a la persona que te escucha.</div></div>
-        </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#FAEEDA;border-color:#FAC775"><div class="fi">👆</div><div class="fw" style="color:#633806;font-size:18px">Él / Ella</div><div class="fh">3ª singular</div></div>
-          <div class="flip-back" style="background:#FAEEDA;border-color:#FAC775"><div class="fb" style="color:#412402"><strong>Él</strong> voló al bosque. <strong>Ella</strong> cantó. <br><br>Se usa para hablar de otra persona.</div></div>
-        </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#E6F1FB;border-color:#85B7EB"><div class="fi">🤝</div><div class="fw" style="color:#185FA5;font-size:16px">Nosotros</div><div class="fh">1ª plural</div></div>
-          <div class="flip-back" style="background:#E6F1FB;border-color:#85B7EB"><div class="fb" style="color:#042C53"><strong>Nosotros</strong> leímos la leyenda. <br><br>Se usa cuando hablas de ti y de otras personas juntas.</div></div>
-        </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#FBEAF0;border-color:#ED93B1"><div class="fi">👫</div><div class="fw" style="color:#993556;font-size:16px">Vosotros</div><div class="fh">2ª plural</div></div>
-          <div class="flip-back" style="background:#FBEAF0;border-color:#ED93B1"><div class="fb" style="color:#4B1528"><strong>Vosotros</strong> sois muy listos. <br><br>Se usa para hablarle a un grupo de personas.</div></div>
-        </div>
-      </div>
-      <div class="flip-wrap" onclick="this.classList.toggle('flipped')">
-        <div class="flip-inner">
-          <div class="flip-front" style="background:#EAF3DE;border-color:#C0DD97"><div class="fi">👥</div><div class="fw" style="color:#3B6D11;font-size:16px">Ellos/Ellas</div><div class="fh">3ª plural</div></div>
-          <div class="flip-back" style="background:#EAF3DE;border-color:#C0DD97"><div class="fb" style="color:#173404"><strong>Ellos</strong> huyeron al monte. <br><br>Se usa para hablar de varias personas.</div></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Ambiente</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Los Andes, Portillo, Chile. Tiempo del Imperio Inca.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Personajes</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Príncipe inca, Kora-Llé (princesa), los dioses andinos.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">¿Qué explica?</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Por qué la Laguna del Inca tiene ese color verde esmeralda único.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Lugar real</div>
+            <div class="text-sm text-gray-900 leading-relaxed">La Laguna del Inca existe hoy en Portillo, Chile.</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- PERRO DE FUEGO -->
+    <div class="story-panel" id="sp-perro">
+      <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+        <h3 class="text-base font-medium text-gray-900 mb-3">🔥 El perro de fuego y el robo del sol y la luna</h3>
+        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mb-3" style="background:#EEEDFE;color:#3C3489">Mito mapuche</span>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div class="rounded-lg p-3 text-center border" style="background:#EEEDFE;border-color:#AFA9EC">
+            <div class="text-2xl mb-1">🌅</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#3C3489">Inicio</div>
+            <div class="text-[11px] leading-snug text-gray-500">El Sol y la Luna iluminan el mundo. Un ser malvado roba la luz y hunde todo en oscuridad.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#E1F5EE;border-color:#5DCAA5">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#085041">Desarrollo</div>
+            <div class="text-[11px] leading-snug text-gray-500">El perro de fuego, guardián del mundo, lucha contra el ser malvado para recuperar la luz.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#FAEEDA;border-color:#FAC775">
+            <div class="text-2xl mb-1">🌄</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#633806">Desenlace</div>
+            <div class="text-[11px] leading-snug text-gray-500">El perro vence y devuelve el fuego al mundo. La luz regresa y el equilibrio se restaura.</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Ambiente</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El universo mapuche. Tiempo del origen del mundo.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Personajes</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El Sol, la Luna, el perro de fuego (héroe), el ser malvado.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">¿Qué explica?</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Por qué hay luz en el mundo y la importancia del equilibrio entre el bien y el mal.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Tipo de texto</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Es un mito: explica el origen de un fenómeno natural (la luz del sol).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZEUS -->
+    <div class="story-panel" id="sp-zeus">
+      <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+        <h3 class="text-base font-medium text-gray-900 mb-3">⚡ El dios Zeus</h3>
+        <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mb-3" style="background:#EEEDFE;color:#3C3489">Mito griego</span>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <div class="rounded-lg p-3 text-center border" style="background:#EEEDFE;border-color:#AFA9EC">
+            <div class="text-2xl mb-1">🌅</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#3C3489">Inicio</div>
+            <div class="text-[11px] leading-snug text-gray-500">Cronos, rey de los titanes, devora a sus hijos para que no lo destituyan del poder.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#E1F5EE;border-color:#5DCAA5">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#085041">Desarrollo</div>
+            <div class="text-[11px] leading-snug text-gray-500">Zeus se salva, crece en secreto y regresa para enfrentarse a Cronos y liberar a sus hermanos.</div>
+          </div>
+          <div class="rounded-lg p-3 text-center border" style="background:#FAEEDA;border-color:#FAC775">
+            <div class="text-2xl mb-1">🌄</div>
+            <div class="text-sm font-medium mb-0.5" style="color:#633806">Desenlace</div>
+            <div class="text-[11px] leading-snug text-gray-500">Zeus vence a los titanes y se convierte en el dios supremo del Monte Olimpo.</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Ambiente</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El Monte Olimpo y el cosmos griego. Tiempo del origen de los dioses.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Personajes</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Zeus (héroe/dios), Cronos (antagonista), dioses olímpicos.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">¿Qué explica?</div>
+            <div class="text-sm text-gray-900 leading-relaxed">El origen del orden divino griego y quién gobierna el universo.</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+            <div class="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Tipo de texto</div>
+            <div class="text-sm text-gray-900 leading-relaxed">Es un mito: los personajes son dioses y explica el origen del poder.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3><i class="ti ti-table" aria-hidden="true"></i> Tabla completa</h3>
-    <table class="pron-table">
-      <thead><tr><th>Pronombre</th><th>Persona</th><th>Ejemplo en un mito</th></tr></thead>
-      <tbody>
-        <tr><td>Yo</td><td>1ª singular</td><td><span class="pron-highlight">Yo</span> soy Zeus, rey del Olimpo.</td></tr>
-        <tr><td>Tú</td><td>2ª singular</td><td><span class="pron-highlight">Tú</span> debes respetar a los dioses.</td></tr>
-        <tr><td>Él / Ella</td><td>3ª singular</td><td><span class="pron-highlight">Él</span> robó el sol y la luna.</td></tr>
-        <tr><td>Nosotros/as</td><td>1ª plural</td><td><span class="pron-highlight">Nosotros</span> escuchamos la leyenda.</td></tr>
-        <tr><td>Vosotros/as</td><td>2ª plural</td><td><span class="pron-highlight">Vosotros</span> conocéis al pájaro Kakach.</td></tr>
-        <tr><td>Ellos / Ellas</td><td>3ª plural</td><td><span class="pron-highlight">Ellos</span> vivían en el Monte Olimpo.</td></tr>
-      </tbody>
-    </table>
+  <!-- ═══════════ PRONOMBRES ═══════════ -->
+  <div class="sec" id="sec-pronombres">
+
+    <!-- ¿Qué son? + flip cards -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-users" aria-hidden="true"></i> ¿Qué son los pronombres personales?</h3>
+      <p class="text-sm text-gray-500 leading-relaxed mb-4">Los pronombres personales son palabras que <strong class="font-medium">reemplazan al nombre de una persona</strong> en la oración. Los usamos para no repetir el nombre todo el tiempo. Son como un "apodo" que le ponemos a alguien dentro de una oración.</p>
+      <p class="text-xs text-gray-400 mb-3">Toca cada tarjeta para ver un ejemplo</p>
+      <div class="grid gap-3" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#EEEDFE;border-color:#AFA9EC">
+              <div class="text-3xl mb-1.5">😊</div>
+              <div class="text-lg font-medium" style="color:#3C3489">Yo</div>
+              <div class="text-xs text-gray-400 mt-0.5">1ª singular</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#EEEDFE;border-color:#AFA9EC;color:#26215C">
+              <strong>Yo</strong> soy el narrador. <br><br>Se usa cuando la persona que habla se refiere a sí misma.
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#E1F5EE;border-color:#5DCAA5">
+              <div class="text-3xl mb-1.5">👉</div>
+              <div class="text-lg font-medium" style="color:#0F6E56">Tú</div>
+              <div class="text-xs text-gray-400 mt-0.5">2ª singular</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#E1F5EE;border-color:#5DCAA5;color:#04342C">
+              <strong>Tú</strong> eres muy valiente. <br><br>Se usa para hablarle a la persona que te escucha.
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#FAEEDA;border-color:#FAC775">
+              <div class="text-3xl mb-1.5">👆</div>
+              <div class="text-base font-medium" style="color:#633806">Él / Ella</div>
+              <div class="text-xs text-gray-400 mt-0.5">3ª singular</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#FAEEDA;border-color:#FAC775;color:#412402">
+              <strong>Él</strong> voló al bosque. <strong>Ella</strong> cantó. <br><br>Se usa para hablar de otra persona.
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#E6F1FB;border-color:#85B7EB">
+              <div class="text-3xl mb-1.5">🤝</div>
+              <div class="text-base font-medium" style="color:#185FA5">Nosotros</div>
+              <div class="text-xs text-gray-400 mt-0.5">1ª plural</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#E6F1FB;border-color:#85B7EB;color:#042C53">
+              <strong>Nosotros</strong> leímos la leyenda. <br><br>Se usa cuando hablas de ti y de otras personas juntas.
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#FBEAF0;border-color:#ED93B1">
+              <div class="text-3xl mb-1.5">👫</div>
+              <div class="text-base font-medium" style="color:#993556">Vosotros</div>
+              <div class="text-xs text-gray-400 mt-0.5">2ª plural</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#FBEAF0;border-color:#ED93B1;color:#4B1528">
+              <strong>Vosotros</strong> sois muy listos. <br><br>Se usa para hablarle a un grupo de personas.
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-wrap h-32" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front rounded-xl border p-2.5 text-center" style="background:#EAF3DE;border-color:#C0DD97">
+              <div class="text-3xl mb-1.5">👥</div>
+              <div class="text-base font-medium" style="color:#3B6D11">Ellos/Ellas</div>
+              <div class="text-xs text-gray-400 mt-0.5">3ª plural</div>
+            </div>
+            <div class="flip-back rounded-xl border p-2.5 text-center text-xs leading-relaxed" style="background:#EAF3DE;border-color:#C0DD97;color:#173404">
+              <strong>Ellos</strong> huyeron al monte. <br><br>Se usa para hablar de varias personas.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tabla completa -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-table" aria-hidden="true"></i> Tabla completa</h3>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-xs border-b border-gray-100">Pronombre</th>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-xs border-b border-gray-100">Persona</th>
+            <th class="text-left px-3 py-2 bg-gray-50 text-gray-500 font-medium text-xs border-b border-gray-100">Ejemplo en un mito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-3 py-2.5 border-b border-gray-100 font-medium text-sm" style="color:#534AB7">Yo</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm">1ª singular</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Yo</span> soy Zeus, rey del Olimpo.</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2.5 border-b border-gray-100 font-medium text-sm" style="color:#534AB7">Tú</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm">2ª singular</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Tú</span> debes respetar a los dioses.</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2.5 border-b border-gray-100 font-medium text-sm" style="color:#534AB7">Él / Ella</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm">3ª singular</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Él</span> robó el sol y la luna.</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2.5 border-b border-gray-100 font-medium text-sm" style="color:#534AB7">Nosotros/as</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm">1ª plural</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Nosotros</span> escuchamos la leyenda.</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2.5 border-b border-gray-100 font-medium text-sm" style="color:#534AB7">Vosotros/as</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm">2ª plural</td>
+            <td class="px-3 py-2.5 border-b border-gray-100 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Vosotros</span> conocéis al pájaro Kakach.</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2.5 font-medium text-sm" style="color:#534AB7">Ellos / Ellas</td>
+            <td class="px-3 py-2.5 text-gray-900 text-sm">3ª plural</td>
+            <td class="px-3 py-2.5 text-gray-900 text-sm"><span class="rounded px-1.5 py-0.5 font-medium text-sm" style="background:#EEEDFE;color:#3C3489">Ellos</span> vivían en el Monte Olimpo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Encuentra el pronombre -->
+    <div class="bg-white border border-gray-100 rounded-xl px-6 py-5 mb-4">
+      <h3 class="text-base font-medium text-gray-900 mb-3 flex items-center gap-2"><i class="ti ti-writing" aria-hidden="true"></i> Encuentra el pronombre</h3>
+      <p class="text-xs text-gray-400 mb-3">Los pronombres están resaltados. ¿Por qué nombre los reemplaza?</p>
+      <div class="text-sm text-gray-900 leading-loose mb-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100"><strong style="color:#534AB7">Ella</strong> bajaba feliz la montaña cuando de repente cayó. → "Ella" reemplaza a <em>Kora-Llé</em></div>
+      <div class="text-sm text-gray-900 leading-loose mb-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100"><strong style="color:#534AB7">Él</strong> voló hasta el árbol más alto del bosque. → "Él" reemplaza a <em>Kakach (el pájaro)</em></div>
+      <div class="text-sm text-gray-900 leading-loose mb-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100"><strong style="color:#534AB7">Ellos</strong> lucharon toda la noche para devolver la luz. → "Ellos" reemplaza a <em>los dioses mapuches</em></div>
+      <div class="text-sm text-gray-900 leading-loose mb-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100"><strong style="color:#534AB7">Yo</strong> soy el más poderoso de todos los dioses. → "Yo" lo dice <em>Zeus</em></div>
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3><i class="ti ti-writing" aria-hidden="true"></i> Encuentra el pronombre</h3>
-    <p class="hint">Los pronombres están resaltados. ¿Por qué nombre los reemplaza?</p>
-    <div class="sentence"><strong style="color:#534AB7">Ella</strong> bajaba feliz la montaña cuando de repente cayó. → "Ella" reemplaza a <em>Kora-Llé</em></div>
-    <div class="sentence"><strong style="color:#534AB7">Él</strong> voló hasta el árbol más alto del bosque. → "Él" reemplaza a <em>Kakach (el pájaro)</em></div>
-    <div class="sentence"><strong style="color:#534AB7">Ellos</strong> lucharon toda la noche para devolver la luz. → "Ellos" reemplaza a <em>los dioses mapuches</em></div>
-    <div class="sentence"><strong style="color:#534AB7">Yo</strong> soy el más poderoso de todos los dioses. → "Yo" lo dice <em>Zeus</em></div>
+  <!-- ═══════════ QUIZ ═══════════ -->
+  <div class="sec" id="sec-quiz">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-gray-50 rounded-full px-3.5 py-1.5 text-sm text-gray-500 border border-gray-100">Puntaje: <span class="font-medium" style="color:#534AB7" id="sc">0</span> / <span id="tot">15</span></div>
+      <div class="flex-1 h-1.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
+        <div class="h-full rounded-full transition-all duration-300" style="background:#534AB7;width:0%" id="pfill"></div>
+      </div>
+    </div>
+    <div id="qcontainer"></div>
+    <div class="text-center py-10" id="qcongrats" style="display:none">
+      <div class="text-5xl mb-3" id="cem">🌟</div>
+      <h2 class="text-xl font-medium text-gray-900 mb-1.5" id="ctit">¡Muy bien!</h2>
+      <p class="text-sm text-gray-500 mb-4" id="cmsg">Terminaste el quiz.</p>
+      <button class="text-white border-none rounded-lg px-6 py-2.5 text-sm cursor-pointer" style="background:#534AB7" onclick="restartQ()">Intentar de nuevo</button>
+    </div>
   </div>
-
-</div>
-
-<!-- ═══════════ QUIZ ═══════════ -->
-<div class="sec" id="sec-quiz">
-  <div class="score-bar">
-    <div class="score-pill">Puntaje: <span id="sc">0</span> / <span id="tot">15</span></div>
-    <div class="prog"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
-  </div>
-  <div id="qcontainer"></div>
-  <div class="congrats" id="qcongrats" style="display:none">
-    <div class="ce" id="cem">🌟</div>
-    <h2 id="ctit">¡Muy bien!</h2>
-    <p id="cmsg">Terminaste el quiz.</p>
-    <button class="restart" onclick="restartQ()">Intentar de nuevo</button>
-  </div>
-</div>
 
 </div>
 
@@ -425,19 +598,19 @@ function renderQ(){
   document.getElementById('tot').textContent=QS.length
   document.getElementById('sc').textContent=sc
   document.getElementById('pfill').style.width=(qi/QS.length*100)+'%'
-  c.innerHTML=`<div class="qbox">
-    <div class="qtext">${qi+1}. ${q.q}</div>
-    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="selOpt(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
-    <div class="qfb" id="qfb"></div>
+  c.innerHTML=`<div class="bg-gray-50 rounded-xl p-5 mb-4">
+    <div class="text-base font-medium text-gray-900 mb-4">${qi+1}. ${q.q}</div>
+    <div class="flex flex-col gap-2">${q.opts.map((o,i)=>`<button class="opt bg-white border border-gray-200 rounded-lg px-3.5 py-2.5 text-left cursor-pointer text-sm text-gray-900 transition-all duration-150" onclick="selOpt(this,${i},${q.ans})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div class="qfb mt-2 text-sm px-3 py-2 rounded-lg" id="qfb"></div>
   </div>
-  <button class="next-q" id="nxq" onclick="nextQ()">Siguiente pregunta →</button>`
+  <button class="next-q text-white border-none rounded-lg px-5 py-2.5 text-sm cursor-pointer mt-2" style="background:#534AB7" id="nxq" onclick="nextQ()">Siguiente pregunta →</button>`
 }
 function selOpt(btn,idx,ans){
   const fb=QS[qi].fb
-  btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.disabled=true)
+  btn.closest('.flex').querySelectorAll('.opt').forEach(b=>b.disabled=true)
   const fbEl=document.getElementById('qfb')
-  if(idx===ans){btn.classList.add('ok');fbEl.textContent='✅ '+fb;fbEl.className='qfb show ok';sc++}
-  else{btn.classList.add('bad');btn.closest('.opts').querySelectorAll('.opt')[ans].classList.add('ok');fbEl.textContent='❌ '+fb;fbEl.className='qfb show bad'}
+  if(idx===ans){btn.classList.add('ok');fbEl.textContent='✅ '+fb;fbEl.className='qfb show mt-2 text-sm px-3 py-2 rounded-lg';fbEl.style.cssText='background:#EAF3DE;color:#3B6D11;display:block';sc++}
+  else{btn.classList.add('bad');btn.closest('.flex').querySelectorAll('.opt')[ans].classList.add('ok');fbEl.textContent='❌ '+fb;fbEl.className='qfb show mt-2 text-sm px-3 py-2 rounded-lg';fbEl.style.cssText='background:#FCEBEB;color:#A32D2D;display:block'}
   document.getElementById('sc').textContent=sc
   document.getElementById('nxq').classList.add('show')
 }
@@ -458,3 +631,6 @@ function restartQ(){qi=0;sc=0;document.getElementById('qcontainer').style.displa
 
 renderQ()
 </script>
+
+</body>
+</html>
