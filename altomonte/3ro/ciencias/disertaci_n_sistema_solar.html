@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disertación: El Sistema Solar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        /* Estrellitas de fondo */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.5;
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        .flashcard {
+            transition: transform 0.2s;
+        }
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="stars"></div>
+
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-4 drop-shadow-lg">
+                🚀 Nuestro Sistema Solar
+            </h1>
+            <p class="text-xl text-blue-200">Guía de estudio para la disertación</p>
+        </header>
+
+        <!-- Botones de Navegación -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <button onclick="showSection('emi', this)" class="tab-btn active bg-gradient-to-b from-yellow-400 to-orange-500 text-white font-bold py-4 px-2 rounded-2xl border-4 border-yellow-200 flex flex-col items-center">
+                <span class="text-3xl mb-1">👦🏻</span>
+                <span class="text-xl">Emi</span>
+                <span class="text-sm font-normal">Intro y Sol</span>
+            </button>
+            
+            <button onclick="showSection('emma', this)" class="tab-btn bg-gradient-to-b from-red-400 to-red-600 text-white font-bold py-4 px-2 rounded-2xl border-4 border-red-200 flex flex-col items-center opacity-80 hover:opacity-100">
+                <span class="text-3xl mb-1">👧🏻</span>
+                <span class="text-xl">Emma</span>
+                <span class="text-sm font-normal">Rocosos</span>
+            </button>
+            
+            <button onclick="showSection('naim', this)" class="tab-btn bg-gradient-to-b from-blue-400 to-indigo-600 text-white font-bold py-4 px-2 rounded-2xl border-4 border-blue-200 flex flex-col items-center opacity-80 hover:opacity-100">
+                <span class="text-3xl mb-1">👦🏽</span>
+                <span class="text-xl">Naim</span>
+                <span class="text-sm font-normal">Gaseosos</span>
+            </button>
+            
+            <button onclick="showSection('agus', this)" class="tab-btn bg-gradient-to-b from-purple-400 to-purple-600 text-white font-bold py-4 px-2 rounded-2xl border-4 border-purple-200 flex flex-col items-center opacity-80 hover:opacity-100">
+                <span class="text-3xl mb-1">👦🏼</span>
+                <span class="text-xl">Agus</span>
+                <span class="text-sm font-normal">Cuerpos Menores</span>
+            </button>
+        </div>
+
+        <!-- Contenido EMI -->
+        <div id="emi" class="content-section">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6 flex items-center gap-3">
+                <span>🌞</span> La parte de Emi: El Sistema Solar y el Sol
+            </h2>
+            <div class="grid gap-4">
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-yellow-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🌌 ¿Qué es?</h3>
+                    <p class="text-lg">Es nuestro vecindario en el espacio. Está en una galaxia con forma de espiral llamada <strong>Vía Láctea</strong>.</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-yellow-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">💫 ¿Quiénes lo forman?</h3>
+                    <p class="text-lg">Una gran estrella central (el Sol), 8 planetas y otros cuerpos celestes que giran a su alrededor.</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-orange-500 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">☀️ El Rey: El Sol</h3>
+                    <p class="text-lg">Es una <strong>estrella enana amarilla</strong>. Nos da luz y calor (porque en su interior transforma hidrógeno en helio).</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-orange-500 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🧲 Su Súper Poder: La Gravedad</h3>
+                    <p class="text-lg">Funciona como un <strong>imán gigante</strong>. Esto mantiene a todos los planetas girando en su órbita para que no se pierdan en el espacio.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido EMMA -->
+        <div id="emma" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-red-400 mb-6 flex items-center gap-3">
+                <span>🪨</span> La parte de Emma: Los 4 Planetas Rocosos
+            </h2>
+            <p class="text-xl mb-4 bg-red-900/50 p-4 rounded-xl border border-red-500/30">
+                Son los planetas <strong>interiores</strong>. Son más pequeños, están hechos de roca y metal, y están antes del cinturón de asteroides.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-gray-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">1. Mercurio 🌑</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>El más pequeño y cercano al Sol.</li>
+                        <li>Días muy calurosos y noches heladas.</li>
+                        <li>No tiene lunas.</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-orange-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">2. Venus ⭐</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>¡El más caliente! (Tiene nubes gruesas que atrapan el calor).</li>
+                        <li>Gira al revés.</li>
+                        <li>¡Brilla mucho en el cielo!</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-blue-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">3. Tierra 🌍</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>¡Nuestro hogar!</li>
+                        <li>El único con oxígeno, agua líquida y vida.</li>
+                        <li>Tiene 1 satélite natural: la Luna.</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-red-500 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">4. Marte 🔴</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>El "Planeta Rojo" (por el hierro de su suelo).</li>
+                        <li>Tiene el volcán más grande: el Monte Olimpo.</li>
+                        <li>Tiene 2 lunas y hay robots explorándolo.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido NAIM -->
+        <div id="naim" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-blue-400 mb-6 flex items-center gap-3">
+                <span>🌪️</span> La parte de Naim: Los 4 Planetas Gaseosos
+            </h2>
+            <p class="text-xl mb-4 bg-blue-900/50 p-4 rounded-xl border border-blue-500/30">
+                Son los planetas <strong>exteriores</strong>. Son gigantes, hechos de gas y hielo, y están después del cinturón de asteroides.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-orange-300 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">5. Júpiter 🟠</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>¡El planeta más grande de todos!</li>
+                        <li>Tiene más de 90 lunas.</li>
+                        <li>Demora 12 años en dar la vuelta al Sol.</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-yellow-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">6. Saturno 🪐</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>El segundo más grande.</li>
+                        <li>Famoso por sus hermosos anillos (hechos de hielo, roca y polvo).</li>
+                        <li>Demora 30 años en dar la vuelta al Sol.</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-cyan-300 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">7. Urano 🧊</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>Planeta de hielo, muy frío.</li>
+                        <li>Se ve azul por los gases que lo envuelven.</li>
+                        <li>¡Gira de lado! Como si rodara en su órbita.</li>
+                    </ul>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-t-8 border-blue-600 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">8. Neptuno 🌀</h3>
+                    <ul class="list-disc ml-5 text-lg space-y-1">
+                        <li>El más lejano y el más frío.</li>
+                        <li>Es un gigante azul.</li>
+                        <li>¡Tiene los vientos más rápidos y fuertes de todos!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido AGUS -->
+        <div id="agus" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-purple-400 mb-6 flex items-center gap-3">
+                <span>☄️</span> La parte de Agus: Cuerpos Menores
+            </h2>
+            <p class="text-xl mb-4 bg-purple-900/50 p-4 rounded-xl border border-purple-500/30">
+                Además de los planetas, en el espacio flotan otros objetos muy interesantes llamados cuerpos menores.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-gray-300 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🌕 Lunas o Satélites</h3>
+                    <p class="text-lg">Son cuerpos de roca que <strong>no tienen luz propia</strong>. Su trabajo es girar alrededor de un planeta (¡como nuestra Luna!).</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-purple-400 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🧊 Planetas Enanos</h3>
+                    <p class="text-lg">Son pequeñitos y su órbita está rodeada de miles de rocas. Ejemplo: <strong>Plutón</strong> (en 2006 dejó de ser el 9vo planeta).</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-stone-500 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🪨 Asteroides</h3>
+                    <p class="text-lg">Son grandes rocas espaciales. La mayoría vive en un lugar llamado "Cinturón de asteroides", justo <strong>entre Marte y Júpiter</strong>.</p>
+                </div>
+                <div class="flashcard bg-slate-800 p-6 rounded-2xl border-l-8 border-cyan-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">🌠 Cometas</h3>
+                    <p class="text-lg">Son bolas de hielo y polvo que viajan por el espacio. Cuando se acercan al Sol, se derriten un poco y <strong>¡forman una cola brillante!</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips de presentación -->
+        <div class="mt-12 bg-white/10 backdrop-blur-sm p-6 rounded-2xl text-center border border-white/20">
+            <h3 class="text-xl font-bold text-yellow-300 mb-2">💡 Tips para su presentación</h3>
+            <p class="text-lg">Respiren profundo, hablen fuerte para que todos escuchen, ¡y no olviden sonreír! Son un equipo genial. 🚀</p>
+        </div>
+
+    </div>
+
+    <script>
+        function showSection(sectionId, btnElement) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Quitar clase active de todos los botones
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('opacity-80');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Activar el botón presionado
+            btnElement.classList.add('active');
+            btnElement.classList.remove('opacity-80');
+        }
+    </script>
+</body>
+</html>

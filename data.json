@@ -37,7 +37,12 @@
             "nombre": "Ciencias",
             "icon": "🔬",
             "color": "#16a085",
-            "archivos": []
+            "archivos": [
+              {
+                "nombre": "Disertación: El Sistema Solar",
+                "archivo": "altomonte/3ro/ciencias/disertaci_n_sistema_solar.html"
+              }
+            ]
           }
         ]
       },
